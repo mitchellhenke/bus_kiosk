@@ -45,7 +45,7 @@ defmodule BusKiosk.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, "~> 0.6.0"},
       {:mojito, "~> 0.6.1"},
-      {:nimble_parsec, "~> 0.2.0"},
+      {:nimble_parsec, "~> 0.5.0"},
       {:tzdata, "~> 1.0"},
       {:eqrcode, "~> 0.1.7"}
     ]
