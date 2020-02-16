@@ -18,8 +18,7 @@ defmodule BusKioskWeb.Router do
   scope "/", BusKioskWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
-    live "/kiosk", KioskLive
+    live "/", KioskLive
   end
 
   # Other scopes may use custom stacks.
