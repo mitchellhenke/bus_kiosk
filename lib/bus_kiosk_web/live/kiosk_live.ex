@@ -1,6 +1,5 @@
 defmodule BusKioskWeb.KioskLive do
   use Phoenix.LiveView
-  alias BusKiosk.RealTime
 
   defmodule Params do
     defstruct [:stop_ids]
@@ -15,7 +14,7 @@ defmodule BusKioskWeb.KioskLive do
       {data, types}
       |> Ecto.Changeset.cast(params, [:stop_ids])
       |> Ecto.Changeset.validate_required([:stop_ids])
-      |> Ecto.Changeset.validate_length(:stop_ids, min: 1)
+      |> Ecto.Changeset.validate_length(:stop_ids, min: 1, max: 4)
     end
   end
 
@@ -33,13 +32,21 @@ defmodule BusKioskWeb.KioskLive do
     socket =
       case Ecto.Changeset.apply_action(changeset, :insert) do
         {:ok, params} ->
-          Process.send_after(self(), :refresh_predictions, 0)
+          stop_prediction_map =
+            Enum.reduce(params.stop_ids, %{}, fn stop_id, map ->
+              Map.put(map, "#{stop_id}", [])
+            end)
 
-          assign(socket, :stop_ids, params.stop_ids)
-          |> assign(:valid, true)
-          |> assign(:title, title)
-          |> assign(:location, location)
-          |> assign(:predictions, [])
+          socket =
+            assign(socket, :stop_prediction_map, stop_prediction_map)
+            |> assign(:stop_ids, params.stop_ids)
+            |> assign(:valid, true)
+            |> assign(:title, title)
+            |> assign(:location, location)
+            |> assign(:predictions, [])
+
+          Process.send_after(self(), :subscribe, 0)
+          socket
 
         {:error, _cs} ->
           assign(socket, :valid, false)
@@ -48,16 +55,15 @@ defmodule BusKioskWeb.KioskLive do
     {:ok, socket}
   end
 
-  def handle_info(:refresh_predictions, socket) do
-    case RealTime.get_predictions(socket.assigns.stop_ids) do
-      {:ok, predictions} ->
-        Process.send_after(self(), :refresh_predictions, 60_000)
-        socket = assign(socket, :predictions, predictions)
-        {:noreply, socket}
+  def handle_info(:subscribe, socket) do
+    BusKiosk.RealTimePoller.subscribe(socket.assigns.stop_ids)
+    {:noreply, socket}
+  end
 
-      _ ->
-        {:noreply, socket}
-    end
+  def handle_info({:bus_predictions, stop_id, predictions}, socket) do
+    map = Map.put(socket.assigns.stop_prediction_map, stop_id, predictions)
+    socket = assign(socket, :stop_prediction_map, map)
+    {:noreply, socket}
   end
 
   def handle_info(_message, socket) do

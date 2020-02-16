@@ -4,14 +4,17 @@ defmodule BusKioskWeb.KioskView do
   def format_only_time(%NaiveDateTime{} = dt) do
     am_pm = am_pm(dt.hour)
 
-    hour = cond do
-      dt.hour == 0 ->
-        12
-      dt.hour >= 13 ->
-        dt.hour - 12
-      true ->
-        dt.hour
-    end
+    hour =
+      cond do
+        dt.hour == 0 ->
+          12
+
+        dt.hour >= 13 ->
+          dt.hour - 12
+
+        true ->
+          dt.hour
+      end
 
     hour = String.pad_leading("#{hour}", 2, "0")
     minute = String.pad_leading("#{dt.minute}", 2, "0")

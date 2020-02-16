@@ -2,8 +2,8 @@
 <%= if @location do %>
   <p><%= @location %></p>
 <% end %>
-<%= Enum.group_by(@predictions, &({&1.stop_id, &1.stop_name})) |> Enum.map(fn {{_stop_id, stop_name}, predictions} -> %>
-  <h1 class="route"><%= stop_name %></h1>
+<%= Enum.map(@stop_prediction_map, fn {stop_id, predictions} -> %>
+  <h1 class="route"><%= stop_id %></h1>
   <div class="flex-grid">
       <div class="col">
         <table>

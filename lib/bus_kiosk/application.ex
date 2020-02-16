@@ -11,9 +11,9 @@ defmodule BusKiosk.Application do
       # Start the Ecto repository
       # BusKiosk.Repo,
       # Start the endpoint when the application starts
-      BusKioskWeb.Endpoint
+      BusKioskWeb.Endpoint,
       # Starts a worker by calling: BusKiosk.Worker.start_link(arg)
-      # {BusKiosk.Worker, arg},
+      {BusKiosk.RealTimePoller, %{}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
