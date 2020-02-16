@@ -1,5 +1,8 @@
 {
   "repository": {},
+  "engines": {
+    "npm": "6.13.6"
+  },
   "license": "MIT",
   "scripts": {
     "deploy": "webpack --mode production",
