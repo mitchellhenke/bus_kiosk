@@ -108,10 +108,11 @@ defmodule BusKiosk.RealTimePoller do
         {:ok, predictions} ->
           Enum.group_by(predictions, & &1.stop_id)
           |> Enum.each(fn {stop_id, predictions} ->
+            sorted_predictions = Enum.sort(predictions, &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt))
             PubSub.broadcast(
               BusKiosk.PubSub,
               "stops:#{stop_id}",
-              {:bus_predictions, stop_id, predictions}
+              {:bus_predictions, stop_id, sorted_predictions}
             )
           end)
 

@@ -19,7 +19,7 @@ defmodule BusKioskWeb.KioskLive do
   end
 
   def mount(params, _session, socket) do
-    title = Map.get(params, "title", "Bus Stop")
+    title = Map.get(params, "title")
     location = Map.get(params, "location")
 
     params =

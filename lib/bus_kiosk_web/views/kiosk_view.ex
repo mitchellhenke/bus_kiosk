@@ -55,6 +55,10 @@ defmodule BusKioskWeb.KioskView do
 
   def stop_name(_stop_id, [prediction | _]) do
     prediction.stop_name
+    |> String.replace(~r/\bSTREET\b/, "ST")
+    |> String.replace(~r/\bAVENUE\b/, "AV")
+    |> String.replace(~r/\bDRIVE\b/, "DR")
+    |> String.replace(~r/\bROAD\b/, "RD")
   end
 
   def url_qr_code do
