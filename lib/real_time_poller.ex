@@ -12,10 +12,19 @@ defmodule BusKiosk.RealTimePoller do
 
   def subscribe(stop_ids) do
     Enum.each(stop_ids, fn stop_id ->
-      PubSub.subscribe(BusKiosk.PubSub, "stops:#{stop_id}")
+      {:ok, _} =
+        Phoenix.Tracker.track(
+          BusKiosk.RealTimeTracker,
+          self(),
+          "stops:#{stop_id}",
+          inspect(:erlang.make_ref()),
+          %{}
+        )
+
+      :ok = PubSub.subscribe(BusKiosk.PubSub, "stops:#{stop_id}")
     end)
 
-    GenServer.call(__MODULE__, {:subscribe, stop_ids})
+    GenServer.cast(__MODULE__, {:refresh_predictions, stop_ids})
   end
 
   def init(opts) do
@@ -25,22 +34,33 @@ defmodule BusKiosk.RealTimePoller do
       |> Map.put(:stop_id_pid_map, %{})
       |> Map.put(:pid_stop_id_map, %{})
 
+    :ok = PubSub.subscribe(BusKiosk.PubSub, "realtime_diff")
     {:ok, opts}
   end
 
-  # live view will subscribe to stops:34, stops:55, stops:59 (through Poller)
-
-  def handle_call({:subscribe, stop_ids}, {pid, _ref}, state) do
-    _ref = Process.monitor(pid)
-    state = add_pid_stop_ids(pid, stop_ids, state)
-    Process.send_after(self(), :refresh_predictions, 0)
-
-    {:reply, :ok, state}
+  def handle_info({:joined, stop_id}, state) do
+    {:noreply,
+     %{
+       state
+       | stop_id_set: MapSet.put(state.stop_id_set, stop_id)
+     }}
   end
 
-  def handle_info({:DOWN, _ref, :process, pid, _reason}, state) do
-    state = cleanup_stop_ids_after_down_pid(pid, state)
-    {:noreply, state}
+  def handle_info({:left, stop_id}, state) do
+    presences = Phoenix.Tracker.list(BusKiosk.RealTimeTracker, "stops:#{stop_id}")
+
+    set =
+      if presences == [] do
+        MapSet.delete(state.stop_id_set, stop_id)
+      else
+        state.stop_id_set
+      end
+
+    {:noreply,
+     %{
+       state
+       | stop_id_set: set
+     }}
   end
 
   def handle_info(:refresh_predictions, state) do
@@ -51,52 +71,14 @@ defmodule BusKiosk.RealTimePoller do
     {:noreply, state}
   end
 
-  def handle_info(_msg, state) do
+  def handle_cast({:refresh_predictions, stop_ids}, state) do
+    refresh_predictions(stop_ids)
+
     {:noreply, state}
   end
 
-  defp cleanup_stop_ids_after_down_pid(pid, state) do
-    {stop_ids, pid_stop_id_map} = Map.pop(state.pid_stop_id_map, pid)
-
-    {stop_id_pid_map, stop_id_set} =
-      Enum.reduce(stop_ids, {state.stop_id_pid_map, state.stop_id_set}, fn stop_id, {map, set} ->
-        pids = Map.fetch!(map, stop_id)
-        updated_pids = MapSet.delete(pids, pid)
-        map = Map.put(map, stop_id, updated_pids)
-
-        # if last pid removed for stop_id, remove stop from poll set
-        if MapSet.size(updated_pids) == 0 do
-          {map, MapSet.delete(set, stop_id)}
-        else
-          {map, set}
-        end
-      end)
-
-    %{
-      state
-      | stop_id_set: stop_id_set,
-        pid_stop_id_map: pid_stop_id_map,
-        stop_id_pid_map: stop_id_pid_map
-    }
-  end
-
-  defp add_pid_stop_ids(pid, stop_ids, state) do
-    stop_id_set = MapSet.union(state.stop_id_set, MapSet.new(stop_ids))
-    pid_stop_id_map = Map.put(state.pid_stop_id_map, pid, stop_ids)
-
-    stop_id_pid_map =
-      Enum.reduce(stop_ids, state.stop_id_pid_map, fn stop_id, map ->
-        Map.update(map, stop_id, MapSet.new([pid]), fn current_set ->
-          MapSet.put(current_set, pid)
-        end)
-      end)
-
-    %{
-      state
-      | stop_id_set: stop_id_set,
-        pid_stop_id_map: pid_stop_id_map,
-        stop_id_pid_map: stop_id_pid_map
-    }
+  def handle_info(_msg, state) do
+    {:noreply, state}
   end
 
   def refresh_predictions([]), do: nil
@@ -108,7 +90,12 @@ defmodule BusKiosk.RealTimePoller do
         {:ok, predictions} ->
           Enum.group_by(predictions, & &1.stop_id)
           |> Enum.each(fn {stop_id, predictions} ->
-            sorted_predictions = Enum.sort(predictions, &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt))
+            sorted_predictions =
+              Enum.sort(
+                predictions,
+                &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt)
+              )
+
             PubSub.broadcast(
               BusKiosk.PubSub,
               "stops:#{stop_id}",

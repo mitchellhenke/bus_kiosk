@@ -13,7 +13,8 @@ defmodule BusKiosk.Application do
       # Start the endpoint when the application starts
       BusKioskWeb.Endpoint,
       # Starts a worker by calling: BusKiosk.Worker.start_link(arg)
-      {BusKiosk.RealTimePoller, %{}}
+      {BusKiosk.RealTimePoller, %{}},
+      {BusKiosk.RealTimeTracker, [name: BusKiosk.RealTimeTracker, pubsub_server: BusKiosk.PubSub]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
