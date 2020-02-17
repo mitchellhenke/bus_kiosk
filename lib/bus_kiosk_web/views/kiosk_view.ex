@@ -1,5 +1,6 @@
 defmodule BusKioskWeb.KioskView do
   use BusKioskWeb, :view
+  alias BusKiosk.RealTimePrediction, as: Prediction
 
   def format_only_time(%NaiveDateTime{} = dt) do
     am_pm = am_pm(dt.hour)
@@ -23,8 +24,27 @@ defmodule BusKioskWeb.KioskView do
     "#{hour}:#{minute}:#{second} #{am_pm}"
   end
 
+  def format_arrival(%Prediction{} = prediction) do
+    case prediction.prediction_countdown_minutes do
+      "DLY" ->
+        "Delayed"
+
+      "DUE" ->
+        "1m"
+
+      minutes ->
+        "#{minutes}m"
+    end
+  end
+
   def am_pm(hour) when hour < 12, do: "AM"
   def am_pm(_hour), do: "PM"
+
+  def stop_name(stop_id, []), do: stop_id
+
+  def stop_name(_stop_id, [prediction | _]) do
+    prediction.stop_name
+  end
 
   def url_qr_code do
     Routes.live_url(BusKioskWeb.Endpoint, BusKioskWeb.KioskLive, %{})

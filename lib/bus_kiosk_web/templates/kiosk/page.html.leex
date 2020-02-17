@@ -3,35 +3,31 @@
   <p><%= @location %></p>
 <% end %>
 <%= Enum.map(@stop_prediction_map, fn {stop_id, predictions} -> %>
-  <h1 class="route"><%= stop_id %></h1>
-  <div class="flex-grid">
-      <div class="col">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Route</th>
-              <th scope="col">Destination</th>
-              <th scope="col">Time Until Arrival</th>
-              <th scope="col">Arrival Time</th>
-              <%# <th scope="col">Last Update</th> %>
-            </tr>
-          </thead>
-          <tbody>
-            <%= Enum.sort(predictions, &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt)) |> Enum.map(fn prediction -> %>
-              <tr>
-                <td><%= prediction.route_display %></td>
-                <td><%= prediction.destination %> (<%= prediction.route_direction %>)</td>
-                <td><%= prediction.prediction_countdown_minutes %> minutes</td>
-                <td><%= format_only_time(prediction.predicted_time) %></td>
-                <%# <td><%= format_only_time(prediction.timestamp) %1></td> %>
-              </tr>
-            <% end) %>
-          </tbody>
-        </table>
-      </div>
-  </div>
+  <h1 class="route"><%= stop_name(stop_id, predictions) %></h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Route</th>
+        <th>Direction</th>
+        <th>Arrival</th>
+        <th>Estimated Time</th>
+        <%# <th>Last Update</th> %>
+      </tr>
+    </thead>
+    <tbody>
+      <%= Enum.sort(predictions, &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt)) |> Enum.map(fn prediction -> %>
+        <tr>
+          <td><strong><%= prediction.route_display %></strong></td>
+          <td><%= String.capitalize(prediction.route_direction) %></td>
+          <td><%= format_arrival(prediction) %></td>
+          <td><%= format_only_time(prediction.predicted_time) %></td>
+          <%# <td><%= format_only_time(prediction.timestamp) %1></td> %>
+        </tr>
+      <% end) %>
+    </tbody>
+  </table>
 <% end) %>
-<div>
-  <%= raw url_qr_code() %>
-</div>
+<%# <div> %>
+  <%# <%= raw url_qr_code() %1> %>
+<%# </div> %>
 
