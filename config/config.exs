@@ -10,6 +10,7 @@ use Mix.Config
 config :bus_kiosk,
   ecto_repos: [BusKiosk.Repo],
   real_time_module: BusKiosk.TestRealTime
+  # mcts_api_key: ""
 
 # Configures the endpoint
 config :bus_kiosk, BusKioskWeb.Endpoint,

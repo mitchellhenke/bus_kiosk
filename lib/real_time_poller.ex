@@ -4,6 +4,7 @@ defmodule BusKiosk.RealTimePoller do
   require Logger
 
   @default_opts %{poll_interval_milliseconds: 60_000}
+  @real_time_module Application.compile_env!(:bus_kiosk, :real_time_module)
 
   def start_link(opts \\ %{}) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -103,7 +104,7 @@ defmodule BusKiosk.RealTimePoller do
   def refresh_predictions(stop_ids) do
     Enum.chunk_every(stop_ids, 10)
     |> Enum.each(fn stop_ids_10 ->
-      case BusKiosk.RealTime.get_predictions(stop_ids_10) do
+      case @real_time_module.get_predictions(stop_ids_10) do
         {:ok, predictions} ->
           Enum.group_by(predictions, & &1.stop_id)
           |> Enum.each(fn {stop_id, predictions} ->
