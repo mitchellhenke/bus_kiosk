@@ -24,6 +24,17 @@ defmodule BusKioskWeb.KioskView do
     "#{hour}:#{minute}:#{second} #{am_pm}"
   end
 
+  def format_predicted_time(%Prediction{} = prediction) do
+    time = format_only_time(prediction.predicted_time)
+
+    if prediction.vehicle_id == "" do
+      "#{time}"
+    else
+      # bus emoji
+      "#{time} " <> <<0xF0, 0x9F, 0x9A, 0x8D>>
+    end
+  end
+
   def format_arrival(%Prediction{} = prediction) do
     case prediction.prediction_countdown_minutes do
       "DLY" ->

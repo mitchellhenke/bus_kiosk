@@ -20,13 +20,17 @@
           <td><strong><%= prediction.route_display %></strong></td>
           <td><%= String.capitalize(prediction.route_direction) %></td>
           <td><%= format_arrival(prediction) %></td>
-          <td><%= format_only_time(prediction.predicted_time) %></td>
+          <td><%= format_predicted_time(prediction) %></td>
           <%# <td><%= format_only_time(prediction.timestamp) %1></td> %>
         </tr>
       <% end) %>
     </tbody>
   </table>
 <% end) %>
+<div>
+  <p class="notes">Notes:</p>
+  <p class="notes">A <%= <<0xF0, 0x9F, 0x9A, 0x8D>> %> means the bus is actively being tracked. Other times are scheduled.</p>
+</div>
 <%# <div> %>
   <%# <%= raw url_qr_code() %1> %>
 <%# </div> %>
