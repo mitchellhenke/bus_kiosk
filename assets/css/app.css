@@ -95,7 +95,7 @@ tbody tr:nth-child(odd){
   width: 100%;
 }
 
-@media (min-width: 40rem) {
+@media (min-width: 64rem) {
   .row {
     flex-direction: row;
     margin-left: -1.0rem;
