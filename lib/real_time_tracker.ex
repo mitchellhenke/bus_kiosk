@@ -14,7 +14,7 @@ defmodule BusKiosk.RealTimeTracker do
 
   def handle_diff(diff, state) do
     Enum.each(diff, fn {topic, {joins, leaves}} ->
-      Enum.each(joins, fn {key, meta} ->
+      Enum.each(joins, fn {_key, _meta} ->
         case String.split(topic, ":") do
           ["stops", stop_id] ->
             PubSub.direct_broadcast!(
@@ -29,7 +29,7 @@ defmodule BusKiosk.RealTimeTracker do
         end
       end)
 
-      Enum.each(leaves, fn {key, meta} ->
+      Enum.each(leaves, fn {_key, _meta} ->
         case String.split(topic, ":") do
           ["stops", stop_id] ->
             PubSub.direct_broadcast!(
