@@ -1,4 +1,5 @@
 defmodule BusKiosk.RealTime do
+  require Logger
   @base_url "http://realtime.ridemcts.com/bustime/api/v3"
 
   def get_predictions(stop_ids) do
@@ -21,7 +22,8 @@ defmodule BusKiosk.RealTime do
           {:ok, prediction} ->
             {:cont, {:ok, [prediction | list]}}
 
-          _ ->
+          e ->
+            Logger.error("Error getting predictions #{inspect(e)}")
             {:halt, :error}
         end
       end)

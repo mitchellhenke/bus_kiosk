@@ -6,7 +6,7 @@ defmodule BusKioskWeb.KioskLive do
 
     def change(params) do
       types = %{
-        stop_ids: {:array, :integer},
+        stop_ids: {:array, :string},
         routes: {:array, :string},
         limit: :integer
       }
@@ -39,13 +39,14 @@ defmodule BusKioskWeb.KioskLive do
     socket =
       case Ecto.Changeset.apply_action(changeset, :insert) do
         {:ok, params} ->
-          stop_prediction_map =
-            Enum.reduce(params.stop_ids, %{}, fn stop_id, map ->
-              Map.put(map, "#{stop_id}", [])
+          stop_prediction_tuples =
+            Enum.map(params.stop_ids, fn stop_id ->
+              {stop_id, []}
             end)
 
           socket =
-            assign(socket, :stop_prediction_map, stop_prediction_map)
+            assign(socket, :stop_prediction_tuples, stop_prediction_tuples)
+            |> assign(:stop_prediction_map, %{})
             |> assign(:stop_ids, params.stop_ids)
             |> assign(:params, params)
             |> assign(:valid, true)
@@ -75,7 +76,16 @@ defmodule BusKioskWeb.KioskLive do
     predictions = filter_predictions(predictions, routes, limit)
 
     map = Map.put(socket.assigns.stop_prediction_map, stop_id, predictions)
-    socket = assign(socket, :stop_prediction_map, map)
+
+    stop_prediction_tuples =
+      Enum.map(socket.assigns.stop_ids, fn stop_id ->
+        {stop_id, Map.get(map, stop_id, [])}
+      end)
+
+    socket =
+      assign(socket, :stop_prediction_map, map)
+      |> assign(:stop_prediction_tuples, stop_prediction_tuples)
+
     {:noreply, socket}
   end
 

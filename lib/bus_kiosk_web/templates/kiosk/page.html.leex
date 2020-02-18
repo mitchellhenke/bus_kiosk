@@ -5,7 +5,7 @@
     </div>
   </div>
 <% end %>
-<%= Enum.chunk_every(@stop_prediction_map, 2) |> Enum.map(fn stop_and_predictions -> %>
+<%= Enum.chunk_every(@stop_prediction_tuples, 2) |> Enum.map(fn stop_and_predictions -> %>
   <div class="row">
     <%= Enum.map(stop_and_predictions,fn {stop_id, predictions} -> %>
       <div class="column">

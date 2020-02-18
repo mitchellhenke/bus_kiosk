@@ -38,6 +38,20 @@ defmodule BusKiosk.RealTimePoller do
     {:ok, opts}
   end
 
+  def handle_cast({:refresh_predictions, stop_ids}, state) do
+    refresh_predictions(stop_ids)
+
+    {:noreply, state}
+  end
+
+  def handle_info(:refresh_predictions, state) do
+    Enum.to_list(state.stop_id_set)
+    |> refresh_predictions()
+
+    Process.send_after(self(), :refresh_predictions, 60_000)
+    {:noreply, state}
+  end
+
   def handle_info({:joined, stop_id}, state) do
     {:noreply,
      %{
@@ -61,20 +75,6 @@ defmodule BusKiosk.RealTimePoller do
        state
        | stop_id_set: set
      }}
-  end
-
-  def handle_info(:refresh_predictions, state) do
-    Enum.to_list(state.stop_id_set)
-    |> refresh_predictions()
-
-    Process.send_after(self(), :refresh_predictions, 60_000)
-    {:noreply, state}
-  end
-
-  def handle_cast({:refresh_predictions, stop_ids}, state) do
-    refresh_predictions(stop_ids)
-
-    {:noreply, state}
   end
 
   def handle_info(_msg, state) do
