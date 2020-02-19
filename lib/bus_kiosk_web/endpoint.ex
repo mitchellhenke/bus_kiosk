@@ -10,7 +10,8 @@ defmodule BusKioskWeb.Endpoint do
     signing_salt: "XF3jHs9n"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  socket "/live", Phoenix.LiveView.Socket,
+    websocket: [compress: true, connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -19,7 +20,7 @@ defmodule BusKioskWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :bus_kiosk,
-    gzip: false,
+    gzip: true,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the

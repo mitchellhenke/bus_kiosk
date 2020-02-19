@@ -15,6 +15,7 @@ config :bus_kiosk,
 # Configures the endpoint
 config :bus_kiosk, BusKioskWeb.Endpoint,
   url: [host: "localhost"],
+  http: [compress: true],
   secret_key_base: "5MVdI104va7hVNk23RNuosKx+wMtp2NFoJZBDqNcqJl8GqiWfuwQPyryVIK6hoNd",
   render_errors: [view: BusKioskWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: BusKiosk.PubSub, adapter: Phoenix.PubSub.PG2],

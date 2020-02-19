@@ -16,7 +16,7 @@ config :bus_kiosk,
 # before starting your production server.
 config :bus_kiosk, BusKioskWeb.Endpoint,
   # Possibly not needed, but doesn't hurt
-  http: [port: {:system, "PORT"}],
+  http: [port: {:system, "PORT"}, compress: true],
   url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 80],
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true,
