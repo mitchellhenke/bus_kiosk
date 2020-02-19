@@ -87,24 +87,28 @@ defmodule BusKiosk.RealTimePoller do
     |> Enum.each(fn stop_ids_10 ->
       case @real_time_module.get_predictions(stop_ids_10) do
         {:ok, predictions} ->
-          Enum.group_by(predictions, & &1.stop_id)
-          |> Enum.each(fn {stop_id, predictions} ->
-            sorted_predictions =
-              Enum.sort(
-                predictions,
-                &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt)
-              )
-
-            PubSub.broadcast(
-              BusKiosk.PubSub,
-              "stops:#{stop_id}",
-              {:bus_predictions, stop_id, sorted_predictions}
-            )
-          end)
+          broadcast_predictions(predictions)
 
         e ->
           Logger.error("Error refreshing predictions: #{inspect(e)}")
       end
+    end)
+  end
+
+  defp broadcast_predictions(predictions) do
+    Enum.group_by(predictions, & &1.stop_id)
+    |> Enum.each(fn {stop_id, predictions} ->
+      sorted_predictions =
+        Enum.sort(
+          predictions,
+          &(NaiveDateTime.compare(&1.predicted_time, &2.predicted_time) == :lt)
+        )
+
+      PubSub.broadcast(
+        BusKiosk.PubSub,
+        "stops:#{stop_id}",
+        {:bus_predictions, stop_id, sorted_predictions}
+      )
     end)
   end
 end
