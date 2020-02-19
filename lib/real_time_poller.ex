@@ -3,7 +3,7 @@ defmodule BusKiosk.RealTimePoller do
   alias Phoenix.PubSub
   require Logger
 
-  @default_opts %{poll_interval_milliseconds: 60_000}
+  @default_opts %{poll_interval_milliseconds: 10_000}
   @real_time_module Application.compile_env!(:bus_kiosk, :real_time_module)
 
   def start_link(opts \\ %{}) do
@@ -31,10 +31,9 @@ defmodule BusKiosk.RealTimePoller do
     opts =
       Map.merge(@default_opts, opts)
       |> Map.put(:stop_id_set, MapSet.new())
-      |> Map.put(:stop_id_pid_map, %{})
-      |> Map.put(:pid_stop_id_map, %{})
 
     :ok = PubSub.subscribe(BusKiosk.PubSub, "realtime_diff")
+    Process.send_after(self(), :refresh_predictions, opts.poll_interval_milliseconds)
     {:ok, opts}
   end
 
@@ -48,7 +47,7 @@ defmodule BusKiosk.RealTimePoller do
     Enum.to_list(state.stop_id_set)
     |> refresh_predictions()
 
-    Process.send_after(self(), :refresh_predictions, 60_000)
+    Process.send_after(self(), :refresh_predictions, state.poll_interval_milliseconds)
     {:noreply, state}
   end
 
