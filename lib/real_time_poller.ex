@@ -3,7 +3,7 @@ defmodule BusKiosk.RealTimePoller do
   alias Phoenix.PubSub
   require Logger
 
-  @default_opts %{poll_interval_milliseconds: 10_000}
+  @default_opts %{poll_interval_milliseconds: 60_000}
   @real_time_module Application.compile_env!(:bus_kiosk, :real_time_module)
 
   def start_link(opts \\ %{}) do
