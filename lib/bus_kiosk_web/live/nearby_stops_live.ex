@@ -27,7 +27,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
     end
   end
 
-  def mount(params, _session, socket) do
+  def mount(_params, _session, socket) do
     changeset = Params.change(%{})
     socket = assign(socket, :changeset, changeset)
 
