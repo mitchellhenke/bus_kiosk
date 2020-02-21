@@ -23,6 +23,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
 
       Ecto.Changeset.cast(changeset, %{stop_ids: stop_ids}, [:stop_ids])
       |> Ecto.Changeset.validate_required([:stop_ids])
+      |> Ecto.Changeset.validate_length(:stop_ids, min: 1, max: 4)
     end
   end
 
