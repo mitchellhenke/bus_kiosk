@@ -1,0 +1,15 @@
+<%= form_for @changeset, "#", [phx_change: :change, phx_submit: :submit], fn f -> %>
+  <fieldset>
+      <%= label f, :stop_ids, "Stop IDs (comma separated)" %>
+      <%= text_input f, :stop_ids_text %>
+      <div>
+        <%= BusKioskWeb.ErrorHelpers.error_tag f, :stop_ids %>
+      </div>
+
+      <%= if @changeset.valid? do %>
+        <%= submit "Get Buses!" %>
+      <% else %>
+        <%= submit "Get Buses!", disabled: true %>
+      <% end %>
+  </fieldset>
+<% end %>
