@@ -19,7 +19,7 @@ defmodule BusKioskWeb.Router do
     pipe_through :browser
 
     live "/", NearbyStopsLive
-    live "/kiosk", KioskLive
+    live "/live", KioskLive
   end
 
   # Other scopes may use custom stacks.

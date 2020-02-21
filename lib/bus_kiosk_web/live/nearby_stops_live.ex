@@ -19,7 +19,9 @@ defmodule BusKioskWeb.NearbyStopsLive do
       stop_ids =
         Ecto.Changeset.get_change(changeset, :stop_ids_text, "")
         |> String.trim_trailing(",")
+        |> String.replace(", ", "")
         |> String.split(",")
+        |> Enum.uniq()
 
       Ecto.Changeset.cast(changeset, %{stop_ids: stop_ids}, [:stop_ids])
       |> Ecto.Changeset.validate_required([:stop_ids])

@@ -99,7 +99,8 @@ defmodule BusKioskWeb.KioskLive do
     else
       ~L"""
       <div>
-        Invalid parameters
+        <p>Oops, looks like there was an error with the stops you asked for.</p>
+        <%= Phoenix.HTML.Link.link "Let's try again", to: BusKioskWeb.Router.Helpers.live_path(BusKioskWeb.Endpoint, BusKioskWeb.NearbyStopsLive, %{}) %>
       </div>
       """
     end
