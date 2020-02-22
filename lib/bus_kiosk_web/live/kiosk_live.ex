@@ -1,5 +1,6 @@
 defmodule BusKioskWeb.KioskLive do
   use Phoenix.LiveView
+  alias BusKioskWeb.KioskView
 
   defmodule Params do
     defstruct [:stop_ids]
@@ -52,7 +53,6 @@ defmodule BusKioskWeb.KioskLive do
             |> assign(:valid, true)
             |> assign(:title, title)
             |> assign(:location, location)
-            |> assign(:predictions, [])
 
           Process.send_after(self(), :subscribe, 0)
           socket
@@ -79,7 +79,13 @@ defmodule BusKioskWeb.KioskLive do
 
     stop_prediction_tuples =
       Enum.map(socket.assigns.stop_ids, fn stop_id ->
-        {stop_id, Map.get(map, stop_id, [])}
+        predictions = Map.get(map, stop_id, [])
+        formatted_predictions = Enum.map(predictions, fn(prediction) ->
+          {prediction.route_display, String.capitalize(prediction.route_direction)}
+            KioskView.format_arrival(prediction), KioskView.format_predicted_time(prediction)}
+        end)
+        stop_name = KioskView.stop_name(stop_id, predictions)
+        {stop_name, formatted_predictions}
       end)
 
     socket =
@@ -95,7 +101,7 @@ defmodule BusKioskWeb.KioskLive do
 
   def render(assigns) do
     if assigns.valid do
-      Phoenix.View.render(BusKioskWeb.KioskView, "page.html", assigns)
+      Phoenix.View.render(KioskView, "page.html", assigns)
     else
       ~L"""
       <div>
