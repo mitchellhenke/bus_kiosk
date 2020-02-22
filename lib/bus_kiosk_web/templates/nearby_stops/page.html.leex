@@ -1,6 +1,7 @@
+<p>Type in up to 4 stop numbers and click the button to see live bus times!</p>
 <%= form_for @changeset, "#", [phx_change: :change, phx_submit: :submit], fn f -> %>
   <fieldset>
-      <%= label f, :stop_ids, "Stop IDs (comma separated)" %>
+      <%= label f, :stop_ids, "Stop Numbers (comma separated)" %>
       <%= text_input f, :stop_ids %>
       <div>
         <%= BusKioskWeb.ErrorHelpers.error_tag f, :stop_id_integers %>
