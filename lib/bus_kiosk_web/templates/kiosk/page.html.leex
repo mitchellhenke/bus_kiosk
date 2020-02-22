@@ -1,13 +1,9 @@
 <%= if @title do %>
-  <div class="row">
-    <div class="column">
-      <h1 class="title"><%= @title %></h1>
-    </div>
-  </div>
+  <h1 class="title"><%= @title %></h1>
 <% end %>
-<div style="flex-wrap: wrap; display: flex; justify-content: space-evenly">
+<div class="prediction-container">
   <%= for {stop_name, predictions} <- @stop_prediction_tuples do %>
-    <div style="flex-grow: 1; margin: 0rem 0.5rem">
+    <div class="prediction-item">
       <h2 class="route"><%= stop_name %></h2>
       <table>
         <thead>
