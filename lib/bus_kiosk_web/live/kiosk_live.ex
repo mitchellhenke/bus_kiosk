@@ -81,7 +81,7 @@ defmodule BusKioskWeb.KioskLive do
       Enum.map(socket.assigns.stop_ids, fn stop_id ->
         predictions = Map.get(map, stop_id, [])
         formatted_predictions = Enum.map(predictions, fn(prediction) ->
-          {prediction.route_display, String.capitalize(prediction.route_direction)}
+          {prediction.route_display, String.capitalize(prediction.route_direction),
             KioskView.format_arrival(prediction), KioskView.format_predicted_time(prediction)}
         end)
         stop_name = KioskView.stop_name(stop_id, predictions)

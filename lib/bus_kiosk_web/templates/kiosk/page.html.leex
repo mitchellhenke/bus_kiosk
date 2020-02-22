@@ -5,37 +5,35 @@
     </div>
   </div>
 <% end %>
-<%= Enum.chunk_every(@stop_prediction_tuples, 2) |> Enum.map(fn stop_and_predictions -> %>
-  <div class="row">
-    <%= Enum.map(stop_and_predictions,fn {stop_id, predictions} -> %>
-      <div class="column">
-        <h2 class="route"><%= stop_name(stop_id, predictions) %></h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Route</th>
-              <th>Direction</th>
-              <th>Arrival</th>
-              <th>Est. Time</th>
-              <%# <th>Last Update</th> %>
-            </tr>
-          </thead>
+<div style="flex-wrap: wrap; display: flex; justify-content: space-evenly">
+  <%= for {stop_name, predictions} <- @stop_prediction_tuples do %>
+    <div style="flex-grow: 1; margin: 0rem 0.5rem">
+      <h2 class="route"><%= stop_name %></h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Direction</th>
+            <th>Arrival</th>
+            <th>Est. Time</th>
+            <%# <th>Last Update</th> %>
+          </tr>
+        </thead>
         <tbody>
-          <%= Enum.map(predictions, fn prediction -> %>
+          <%= for {route, direction, arrival, predicted_time} <- predictions do %>
             <tr>
-              <td><strong><%= prediction.route_display %></strong></td>
-              <td><%= String.capitalize(prediction.route_direction) %></td>
-              <td><%= format_arrival(prediction) %></td>
-              <td><%= format_predicted_time(prediction) %></td>
+              <td><strong><%= route %></strong></td>
+              <td><%= direction %></td>
+              <td><%= arrival %></td>
+              <td><%= predicted_time %></td>
               <%# <td><%= format_only_time(prediction.timestamp) %1></td> %>
             </tr>
-          <% end) %>
+          <% end %>
         </tbody>
       </table>
     </div>
-  <% end) %>
-  </div>
-<% end) %>
+  <% end %>
+</div>
 <div>
   <p class="notes">Notes:</p>
   <p class="notes">A <%= <<0xF0, 0x9F, 0x9A, 0x8D>> %> means the bus is actively being tracked. Other times are scheduled.</p>
