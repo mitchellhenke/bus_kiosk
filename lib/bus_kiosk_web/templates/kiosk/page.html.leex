@@ -33,5 +33,10 @@
 <div>
   <p class="notes">Notes:</p>
   <p class="notes">A <%= <<0xF0, 0x9F, 0x9A, 0x8D>> %> means the bus is actively being tracked. Other times are scheduled.</p>
-  <p class="notes">You can bookmark this page or save it to your home screen to get bus times even quicker!</p>
+  <p class="notes">Bookmark this page or save it to your home screen to get these bus times even quicker!</p>
+  <p class="notes">You can also share this page to send these bus times to a friend!</p>
+  <p class="notes">You can also share this page to send these bus times to a friend!</p>
+  <div>
+    <%= link "Get bus times for other stops", to: Routes.live_path(BusKioskWeb.Endpoint, BusKioskWeb.NearbyStopsLive) %>
+  </div>
 </div>
