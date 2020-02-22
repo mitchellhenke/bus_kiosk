@@ -6,26 +6,26 @@ defmodule BusKioskWeb.NearbyStopsLive do
 
     def change(params) do
       types = %{
-        stop_ids: {:array, :integer},
-        stop_ids_text: :string
+        stop_ids: :string,
+        stop_ids_integers: {:array, :integer}
       }
 
       data = %Params{}
 
       changeset =
-        Ecto.Changeset.cast({data, types}, params, [:stop_ids_text])
-        |> Ecto.Changeset.validate_required([:stop_ids_text])
+        Ecto.Changeset.cast({data, types}, params, [:stop_ids])
+        |> Ecto.Changeset.validate_required([:stop_ids])
 
-      stop_ids =
-        Ecto.Changeset.get_change(changeset, :stop_ids_text, "")
+      stop_ids_integers =
+        Ecto.Changeset.get_change(changeset, :stop_ids, "")
         |> String.trim_trailing(",")
         |> String.replace(", ", "")
         |> String.split(",")
         |> Enum.uniq()
 
-      Ecto.Changeset.cast(changeset, %{stop_ids: stop_ids}, [:stop_ids])
-      |> Ecto.Changeset.validate_required([:stop_ids])
-      |> Ecto.Changeset.validate_length(:stop_ids, min: 1, max: 4)
+      Ecto.Changeset.cast(changeset, %{stop_ids_integers: stop_ids_integers}, [:stop_ids_integers])
+      |> Ecto.Changeset.validate_required([:stop_ids_integers])
+      |> Ecto.Changeset.validate_length(:stop_ids_integers, min: 1, max: 4)
     end
   end
 
@@ -36,8 +36,31 @@ defmodule BusKioskWeb.NearbyStopsLive do
     {:ok, socket}
   end
 
+  def handle_params(params, _uri, socket) do
+    changeset = Params.change(params)
+    socket = handle_changeset(socket, changeset)
+
+    {:noreply, socket}
+  end
+
   def handle_event("change", %{"params" => params}, socket) do
-    socket = handle_params(socket, params)
+    changeset = Params.change(params)
+    socket = handle_changeset(socket, changeset)
+
+    socket =
+      case Map.fetch(socket.assigns, :params) do
+        {:ok, %{stop_ids_integers: _, stop_ids: text}} ->
+          path =
+            BusKioskWeb.Router.Helpers.live_path(socket, BusKioskWeb.NearbyStopsLive, %{
+              stop_ids: text
+            })
+
+          push_patch(socket, to: path)
+
+        _ ->
+          socket
+      end
+
     {:noreply, socket}
   end
 
@@ -46,7 +69,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
      redirect(socket,
        to:
          BusKioskWeb.Router.Helpers.live_path(socket, BusKioskWeb.KioskLive, %{
-           stop_ids: socket.assigns.params.stop_ids_text
+           stop_ids: socket.assigns.params.stop_ids
          })
      )}
   end
@@ -55,9 +78,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
     Phoenix.View.render(BusKioskWeb.NearbyStopsView, "page.html", assigns)
   end
 
-  defp handle_params(socket, params) do
-    changeset = Params.change(params)
-
+  defp handle_changeset(socket, changeset) do
     case Ecto.Changeset.apply_action(changeset, :insert) do
       {:ok, params} ->
         assign(socket, :changeset, changeset)
@@ -65,6 +86,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
 
       {:error, error_changeset} ->
         assign(socket, :changeset, error_changeset)
+        |> assign(:params, nil)
     end
   end
 end

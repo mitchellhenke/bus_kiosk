@@ -29,10 +29,12 @@ defmodule BusKioskWeb.KioskLive do
 
     params =
       Map.update(params, "stop_ids", nil, fn stop_ids ->
-        String.split(stop_ids, ",")
+        String.trim_trailing(stop_ids, ",")
+        |> String.split(",")
       end)
       |> Map.update("routes", nil, fn routes ->
-        String.split(routes, ",")
+        String.trim_trailing(routes, ",")
+        |> String.split(",")
       end)
 
     changeset = Params.change(params)
@@ -80,10 +82,13 @@ defmodule BusKioskWeb.KioskLive do
     stop_prediction_tuples =
       Enum.map(socket.assigns.stop_ids, fn stop_id ->
         predictions = Map.get(map, stop_id, [])
-        formatted_predictions = Enum.map(predictions, fn(prediction) ->
-          {prediction.route_display, String.capitalize(prediction.route_direction),
-            KioskView.format_arrival(prediction), KioskView.format_predicted_time(prediction)}
-        end)
+
+        formatted_predictions =
+          Enum.map(predictions, fn prediction ->
+            {prediction.route_display, String.capitalize(prediction.route_direction),
+             KioskView.format_arrival(prediction), KioskView.format_predicted_time(prediction)}
+          end)
+
         stop_name = KioskView.stop_name(stop_id, predictions)
         {stop_name, formatted_predictions}
       end)
