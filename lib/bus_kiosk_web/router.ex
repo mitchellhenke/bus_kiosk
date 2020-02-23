@@ -18,7 +18,7 @@ defmodule BusKioskWeb.Router do
   scope "/", BusKioskWeb do
     pipe_through :browser
 
-    live "/", NearbyStopsLive
+    live "/", HomeLive
     live "/live", KioskLive
   end
 

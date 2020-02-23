@@ -1,4 +1,4 @@
-defmodule BusKioskWeb.NearbyStopsLive do
+defmodule BusKioskWeb.HomeLive do
   use Phoenix.LiveView
 
   defmodule Params do
@@ -51,7 +51,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
       case Map.fetch(socket.assigns, :params) do
         {:ok, %{stop_ids_integers: _, stop_ids: text}} ->
           path =
-            BusKioskWeb.Router.Helpers.live_path(socket, BusKioskWeb.NearbyStopsLive, %{
+            BusKioskWeb.Router.Helpers.live_path(socket, BusKioskWeb.HomeLive, %{
               stop_ids: text
             })
 
@@ -75,7 +75,7 @@ defmodule BusKioskWeb.NearbyStopsLive do
   end
 
   def render(assigns) do
-    Phoenix.View.render(BusKioskWeb.NearbyStopsView, "page.html", assigns)
+    Phoenix.View.render(BusKioskWeb.HomeView, "page.html", assigns)
   end
 
   defp handle_changeset(socket, changeset) do
