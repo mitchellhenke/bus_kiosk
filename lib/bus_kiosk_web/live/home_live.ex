@@ -65,7 +65,7 @@ defmodule BusKioskWeb.HomeLive do
   end
 
   def handle_event("submit", _params, socket) do
-    {:stop,
+    {:noreply,
      redirect(socket,
        to:
          BusKioskWeb.Router.Helpers.live_path(socket, BusKioskWeb.KioskLive, %{
