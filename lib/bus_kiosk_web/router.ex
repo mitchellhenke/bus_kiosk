@@ -19,6 +19,7 @@ defmodule BusKioskWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    get "/saved_stops", SavedStopController, :index
     live "/live", KioskLive
   end
 

@@ -226,6 +226,9 @@ select {
   height: 3.8rem;
   padding: .6rem 1.0rem;
   width: 100%;
+  /* specifying font-size: 16px is necessary to avoid
+   * zooming inputs on mobile browsers? */
+  font-size: 16px;
 }
 
 input[type='email']:focus,
@@ -452,6 +455,19 @@ img {
 
 /* My stuff */
 
+.notes {
+  margin: 0rem;
+}
+
+@media (max-width: 64rem) {
+  .container {
+    padding: 0.0rem 2.0rem 3.0rem 2.0rem;
+  }
+}
+
+
+/* Live predictions page */
+
 .title {
   background-color: rgb(22, 80, 153);
   color: white;
@@ -466,11 +482,8 @@ img {
   margin: 0rem 0rem;
 }
 
-.notes {
-  margin: 0rem;
-}
 
-tbody tr:nth-child(odd){
+.prediction-container tbody tr:nth-child(odd){
   background-color: #F4F4F4;
 }
 
@@ -486,3 +499,19 @@ tbody tr:nth-child(odd){
  margin: 0rem 0.5rem;
 }
 
+/* add_stops_controller.js */
+
+.add-stops {
+  display: none;
+}
+
+.add-stops.not-saved {
+  display: initial;
+}
+
+/* saved_stops_index_controller.js */
+
+.saved-stops-index button {
+  padding: 0 0.5rem;
+  margin-left: 3rem;
+}
