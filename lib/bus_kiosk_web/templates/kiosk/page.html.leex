@@ -36,7 +36,7 @@
          data-add-stops-stop-ids="<%= @joined_stop_ids %>"
          data-add-stops-stop-names="<%= @joined_stop_names %>"
       >
-      <input data-target="add-stops.name" placeholder="<%= @joined_stop_names %>" />
+      <input type="text" data-target="add-stops.name" placeholder="<%= @joined_stop_names %>" />
       <button data-action="click->add-stops#save"><%= @add_stop_button_text %></button>
     </div>
   </div>

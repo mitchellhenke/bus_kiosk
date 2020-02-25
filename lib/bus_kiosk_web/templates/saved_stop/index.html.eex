@@ -5,13 +5,13 @@
       <ul>
         <li>
           <a><strong></strong></a>
-          <button></button>
+          <button>Remove</button>
         </li>
     </div>
   </template>
   <template id="no-saved-stops">
     <div>
-      <p></p>
+      <p>You have no saved stops 🤭</p>
     </div>
   </template>
 </div>

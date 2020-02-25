@@ -29,7 +29,6 @@ export default class extends Controller {
 
       strong.textContent = stop.name;
       anchor.href = `/live?stop_ids=${key}`;
-      button.textContent = "Remove";
       button.setAttribute(`data-key`, `${key}`)
       button.setAttribute('data-action', `click->${this.identifier}#remove`)
       this.element.appendChild(clone);
@@ -39,8 +38,6 @@ export default class extends Controller {
   renderNoStops() {
     const template = document.querySelector('#no-saved-stops');
     const clone = template.content.cloneNode(true);
-    const paragraph = clone.querySelector("p");
-    paragraph.textContent = "You have no saved stops 🤭";
     this.element.appendChild(clone);
   }
 
