@@ -2,32 +2,9 @@
   <h1 class="title"><%= @title %></h1>
 <% end %>
 <div class="prediction-container">
-  <%= for {_stop_id, stop_name, predictions} <- @stop_prediction_tuples do %>
-    <div class="prediction-item">
-      <h2 class="route"><%= stop_name %></h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Route</th>
-            <th>Direction</th>
-            <th>Arrival</th>
-            <th>Est. Time</th>
-            <%# <th>Last Update</th> %>
-          </tr>
-        </thead>
-        <tbody>
-          <%= for {route, direction, arrival, predicted_time} <- predictions do %>
-            <tr>
-              <td><strong><%= route %></strong></td>
-              <td><%= direction %></td>
-              <td><%= arrival %></td>
-              <td><%= predicted_time %></td>
-              <%# <td><%= format_only_time(prediction.timestamp) %1></td> %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+  <%= for {stop_id, stop_name, predictions} <- @stop_prediction_tuples do %>
+    <%= live_component(@socket, BusKioskWeb.StopPredictionsComponent, id: stop_id,
+      stop_name: stop_name, predictions: predictions) %>
   <% end %>
 </div>
 <%= if @joined_stop_names do %>
