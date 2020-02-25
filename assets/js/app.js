@@ -20,7 +20,7 @@ application.load(definitionsFromContext(context))
 
 const path = window.location.pathname.slice(0, 6)
 const isKiosk = path.startsWith("/live");
-const isHome = path === "/";
+const isHome = (path === "/" || path === "");
 
 if(isKiosk || isHome) {
   let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
