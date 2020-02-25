@@ -482,6 +482,9 @@ img {
   margin: 0rem 0rem;
 }
 
+input[type='text']::placeholder {
+  color: #6c7882;
+}
 
 .prediction-container tbody tr:nth-child(odd){
   background-color: #F4F4F4;
