@@ -12,10 +12,21 @@ import css from "../css/app.css"
 import "phoenix_html"
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
+import { Application } from "stimulus"
+import { definitionsFromContext } from "stimulus/webpack-helpers"
+const application = Application.start()
+const context = require.context("./controllers", true, /\.js$/)
+application.load(definitionsFromContext(context))
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}});
-liveSocket.connect()
+const path = window.location.pathname.slice(0, 6)
+const isKiosk = path.startsWith("/live");
+const isHome = path === "/";
+
+if(isKiosk || isHome) {
+  let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+  let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}});
+  liveSocket.connect()
+}
 
 // Import local files
 //

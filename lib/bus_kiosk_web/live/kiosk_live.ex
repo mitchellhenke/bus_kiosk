@@ -30,6 +30,7 @@ defmodule BusKioskWeb.KioskLive do
     params =
       Map.update(params, "stop_ids", nil, fn stop_ids ->
         String.trim_trailing(stop_ids, ",")
+        |> String.replace(" ", "")
         |> String.split(",")
       end)
       |> Map.update("routes", nil, fn routes ->
@@ -44,13 +45,16 @@ defmodule BusKioskWeb.KioskLive do
         {:ok, params} ->
           stop_prediction_tuples =
             Enum.map(params.stop_ids, fn stop_id ->
-              {stop_id, []}
+              {stop_id, stop_id, []}
             end)
 
           socket =
             assign(socket, :stop_prediction_tuples, stop_prediction_tuples)
             |> assign(:stop_prediction_map, %{})
             |> assign(:stop_ids, params.stop_ids)
+            |> assign(:joined_stop_ids, nil)
+            |> assign(:joined_stop_names, nil)
+            |> assign(:add_stop_button_text, "Save Stop")
             |> assign(:params, params)
             |> assign(:valid, true)
             |> assign(:title, title)
@@ -90,12 +94,13 @@ defmodule BusKioskWeb.KioskLive do
           end)
 
         stop_name = KioskView.stop_name(stop_id, predictions)
-        {stop_name, formatted_predictions}
+        {stop_id, stop_name, formatted_predictions}
       end)
 
     socket =
       assign(socket, :stop_prediction_map, map)
       |> assign(:stop_prediction_tuples, stop_prediction_tuples)
+      |> setup_add_button_assigns(stop_prediction_tuples)
 
     {:noreply, socket}
   end
@@ -114,6 +119,40 @@ defmodule BusKioskWeb.KioskLive do
         <%= Phoenix.HTML.Link.link "Let's try again", to: BusKioskWeb.Router.Helpers.live_path(BusKioskWeb.Endpoint, BusKioskWeb.HomeLive, %{}) %>
       </div>
       """
+    end
+  end
+
+  defp setup_add_button_assigns(socket, stop_prediction_tuples) do
+    all_stops_have_predictions =
+      Enum.all?(stop_prediction_tuples, fn {_, _, predictions} ->
+        if length(predictions) > 0 do
+          true
+        else
+          false
+        end
+      end)
+
+    joined_stop_names =
+      Enum.map(stop_prediction_tuples, fn {_, name, _} -> name end)
+      |> Enum.join(",")
+
+    joined_stop_ids =
+      Enum.map(stop_prediction_tuples, fn {stop_id, _, _} -> stop_id end)
+      |> Enum.join(",")
+
+    save_stop_button_text =
+      if length(stop_prediction_tuples) > 1 do
+        "Save Stop Group"
+      else
+        "Save Stop"
+      end
+
+    if all_stops_have_predictions do
+      assign(socket, :joined_stop_names, joined_stop_names)
+      |> assign(:joined_stop_ids, joined_stop_ids)
+      |> assign(:save_stop_button_text, save_stop_button_text)
+    else
+      socket
     end
   end
 

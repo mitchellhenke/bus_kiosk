@@ -16,9 +16,15 @@
   </fieldset>
 <% end %>
 <div>
+  <ul>
+    <li>
+      <%= link "My Saved Stops", to: Routes.saved_stop_path(BusKioskWeb.Endpoint, :index) %>
+    </li>
+  </ul>
+</div>
+<div>
   <div>Coming Soon:</div>
   <ul>
     <li>Getting stops near your location</li>
-    <li>Saving stop(s)</li>
   </ul>
 </div>
