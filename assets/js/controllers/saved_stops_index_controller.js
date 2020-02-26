@@ -46,7 +46,12 @@ export default class extends Controller {
   // to remove the row from the page.
   remove(el) {
     const key = el.target.getAttribute("data-key");
-    const stops = Storage.removeSavedStops(key);
+    Storage.removeSavedStops(key);
     el.target.parentNode.remove();
+
+    const stops = Storage.getSavedStops();
+    if(Object.keys(stops).length === 0) {
+      this.renderNoStops();
+    }
   }
 }
