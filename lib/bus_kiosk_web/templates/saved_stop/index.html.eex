@@ -1,6 +1,6 @@
 <h1>My Saved Stops</h1>
 <div class="saved-stops-index" data-controller="saved-stops-index">
-  <template id="saved-stops">
+  <template data-target="saved-stops-index.stopsTemplate">
     <div>
       <ul>
         <li>
@@ -9,7 +9,7 @@
         </li>
     </div>
   </template>
-  <template id="no-saved-stops">
+  <template data-target="saved-stops-index.noStopsTemplate">
     <div>
       <p>You have no saved stops 🤭</p>
     </div>

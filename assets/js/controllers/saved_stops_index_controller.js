@@ -5,6 +5,7 @@ import Storage from "../storage"
 // to the "/live" page and a button to remove it.
 // If there are no saved stops, they get a message telling them that.
 export default class extends Controller {
+  static targets = [ "stopsTemplate", "noStopsTemplate" ];
   connect() {
     const stops = Storage.getSavedStops();
 
@@ -20,7 +21,7 @@ export default class extends Controller {
   // of the key from the stored stops "database". #remove uses this id in the click callback
   // to delete it from the "database".
   renderStops(stops) {
-    const template = document.querySelector('#saved-stops');
+    const template = this.stopsTemplateTarget;
     for (let [key, stop] of Object.entries(stops)) {
       const clone = template.content.cloneNode(true);
       const anchor = clone.querySelector("a");
@@ -36,7 +37,7 @@ export default class extends Controller {
   }
 
   renderNoStops() {
-    const template = document.querySelector('#no-saved-stops');
+    const template = this.noStopsTemplateTarget;
     const clone = template.content.cloneNode(true);
     this.element.appendChild(clone);
   }
