@@ -8,17 +8,17 @@ defmodule BusKioskWeb.KioskLive do
     def change(params) do
       types = %{
         stop_ids: {:array, :string},
-        routes: {:array, :string},
+        route_ids: {:array, :string},
         limit: :integer
       }
 
       data = %Params{}
 
       {data, types}
-      |> Ecto.Changeset.cast(params, [:stop_ids, :limit, :routes])
+      |> Ecto.Changeset.cast(params, [:stop_ids, :limit, :route_ids])
       |> Ecto.Changeset.validate_required([:stop_ids])
       |> Ecto.Changeset.validate_length(:stop_ids, min: 1, max: 4)
-      |> Ecto.Changeset.validate_length(:routes, min: 0, max: 99)
+      |> Ecto.Changeset.validate_length(:route_ids, min: 0, max: 99)
       |> Ecto.Changeset.validate_number(:limit, greater_than: 0, less_than: 100)
     end
   end
@@ -33,8 +33,8 @@ defmodule BusKioskWeb.KioskLive do
         |> String.replace(" ", "")
         |> String.split(",")
       end)
-      |> Map.update("routes", nil, fn routes ->
-        String.trim_trailing(routes, ",")
+      |> Map.update("route_ids", nil, fn route_ids ->
+        String.trim_trailing(route_ids, ",")
         |> String.split(",")
       end)
 
@@ -76,10 +76,10 @@ defmodule BusKioskWeb.KioskLive do
   end
 
   def handle_info({:bus_predictions, stop_id, predictions}, socket) do
-    routes = Map.get(socket.assigns.params, :routes)
+    route_ids = Map.get(socket.assigns.params, :route_ids)
     limit = Map.get(socket.assigns.params, :limit)
 
-    predictions = filter_predictions(predictions, routes, limit)
+    predictions = filter_predictions(predictions, route_ids, limit)
 
     map = Map.put(socket.assigns.stop_prediction_map, stop_id, predictions)
 
@@ -159,15 +159,15 @@ defmodule BusKioskWeb.KioskLive do
   defp filter_predictions(predictions, nil, nil), do: predictions
   defp filter_predictions(predictions, nil, limit), do: Enum.take(predictions, limit)
 
-  defp filter_predictions(predictions, routes, nil) do
+  defp filter_predictions(predictions, route_ids, nil) do
     Enum.filter(predictions, fn prediction ->
-      Enum.member?(routes, prediction.route)
+      Enum.member?(route_ids, prediction.route)
     end)
   end
 
-  defp filter_predictions(predictions, routes, limit) do
+  defp filter_predictions(predictions, route_ids, limit) do
     Enum.filter(predictions, fn prediction ->
-      Enum.member?(routes, prediction.route)
+      Enum.member?(route_ids, prediction.route)
     end)
     |> Enum.take(limit)
   end
