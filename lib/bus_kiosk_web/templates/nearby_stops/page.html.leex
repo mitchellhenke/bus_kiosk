@@ -1,0 +1,9 @@
+<div id="nearby-stops" phx-update="ignore" phx-hook="nearbyStops" class="nearby-stops" data-controller="nearby-stops">
+</div>
+
+<%= for stop <- @stops do %>
+  <div>
+    <%= live_redirect stop.stop_name, to: Routes.live_path(@socket, BusKioskWeb.KioskLive, stop_ids: stop.stop_id) %>
+    <div><%= stop.route_ids %></div>
+  </div>
+<% end %>

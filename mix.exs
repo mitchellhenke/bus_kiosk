@@ -47,6 +47,8 @@ defmodule BusKiosk.MixProject do
       {:mojito, "~> 0.6.1"},
       {:nimble_parsec, "~> 0.5.0"},
       {:tzdata, "~> 1.0"},
+      {:geo, "~> 3.0"},
+      {:geo_postgis, "~> 3.0"},
       {:eqrcode, "~> 0.1.7"}
     ]
   end

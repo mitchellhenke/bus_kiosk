@@ -27,6 +27,12 @@ config :bus_kiosk, BusKioskWeb.Endpoint,
     signing_salt: System.fetch_env!("SIGNING_SALT")
   ]
 
+config :bus_kiosk, BusKiosk.Repo,
+  url: System.get_env("DO_DATABASE_URL"),
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  ssl: true,
+  types: BusKiosk.PostgresTypes
+
 # Do not print debug messages in production
 config :logger, level: :info
 

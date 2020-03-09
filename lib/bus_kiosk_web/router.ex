@@ -20,6 +20,7 @@ defmodule BusKioskWeb.Router do
 
     live "/", HomeLive
     get "/saved_stops", SavedStopController, :index
+    live "/nearby_stops", NearbyStopsLive
     live "/live", KioskLive
   end
 
