@@ -1,9 +1,23 @@
 <div id="nearby-stops" phx-update="ignore" phx-hook="nearbyStops" class="nearby-stops" data-controller="nearby-stops">
+  <button data-action="click->nearby-stops#locate">
+    Greet
+  </button>
 </div>
 
 <%= for stop <- @stops do %>
   <div>
-    <%= live_redirect stop.stop_name, to: Routes.live_path(@socket, BusKioskWeb.KioskLive, stop_ids: stop.stop_id) %>
-    <div><%= stop.route_ids %></div>
+    <%= live_redirect "#{stop.stop_name} (#{round(stop.distance)} ft#{azimuth_emoji(stop.adjusted_azimuth)})", to: Routes.live_path(@socket, BusKioskWeb.KioskLive, stop_ids: stop.stop_id) %>
+    <div><%= Enum.join(stop.route_ids, ", ") %></div>
   </div>
 <% end %>
+
+<div>
+  <ul>
+    <li>
+      <%= link "My Saved Stops", to: Routes.saved_stop_path(BusKioskWeb.Endpoint, :index) %>
+    </li>
+    <li>
+      <%= link "Home", to: Routes.live_path(BusKioskWeb.Endpoint, BusKioskWeb.HomeLive) %>
+    </li>
+  </ul>
+</div>

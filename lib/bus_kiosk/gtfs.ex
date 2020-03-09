@@ -210,8 +210,10 @@ defmodule BusKiosk.Gtfs do
       Repo.query(
         """
         update gtfs.stops set geom_point = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat), 4326) where feed_id = $1
-        """, [feed.id]
+        """,
+        [feed.id]
       )
+
     # {:ok, _result} =
     #   Repo.query(
     #     """
@@ -280,14 +282,37 @@ defmodule BusKiosk.Gtfs do
 
   def update_trip_times(feed) do
     feed_id = feed.id
-    trips = from(st in StopTime, select: %{trip_id: st.trip_id, start_time: min(st.arrival_time), end_time: max(st.arrival_time), time_seconds: fragment("extract(epoch from MAX(?)) - extract(epoch from MIN(?))", st.arrival_time, st.arrival_time)}, where: st.feed_id == ^feed_id, group_by: st.trip_id) |> Repo.all()
 
-    Enum.each(trips, fn(%{trip_id: trip_id, time_seconds: seconds, start_time: start_time, end_time: end_time}) ->
+    trips =
+      from(st in StopTime,
+        select: %{
+          trip_id: st.trip_id,
+          start_time: min(st.arrival_time),
+          end_time: max(st.arrival_time),
+          time_seconds:
+            fragment(
+              "extract(epoch from MAX(?)) - extract(epoch from MIN(?))",
+              st.arrival_time,
+              st.arrival_time
+            )
+        },
+        where: st.feed_id == ^feed_id,
+        group_by: st.trip_id
+      )
+      |> Repo.all()
+
+    Enum.each(trips, fn %{
+                          trip_id: trip_id,
+                          time_seconds: seconds,
+                          start_time: start_time,
+                          end_time: end_time
+                        } ->
       from(t in Trip, where: t.trip_id == ^trip_id and t.feed_id == ^feed_id)
-      |> Repo.update_all(set: [length_seconds: round(seconds), start_time: start_time, end_time: end_time])
+      |> Repo.update_all(
+        set: [length_seconds: round(seconds), start_time: start_time, end_time: end_time]
+      )
     end)
   end
-
 
   defp parse_interval(interval) do
     [hour, minute, second] =

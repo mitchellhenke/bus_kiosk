@@ -68,10 +68,11 @@ defmodule BusKiosk.Gtfs.Stop do
 
   def get_nearest(point) do
     feed = BusKiosk.Gtfs.Feed.get_first_after_date(Date.utc_today())
+
     {:ok, result} =
       Repo.query(
         """
-        select s.*, s.geom_point::geography <-> $1 as distance
+        select s.*, (s.geom_point::geography <-> $1) * 3.28084 as distance, degrees(ST_Azimuth($1::geometry, s.geom_point)) as azimuth
         FROM gtfs.stops s
         WHERE s.feed_id = $2
         order by s.geom_point <-> $1
@@ -79,6 +80,7 @@ defmodule BusKiosk.Gtfs.Stop do
         """,
         [point, feed.id]
       )
+
     columns = Enum.map(result.columns, &String.to_atom(&1))
 
     Enum.map(result.rows, fn row ->
