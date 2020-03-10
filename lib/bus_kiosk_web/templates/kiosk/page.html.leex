@@ -4,7 +4,7 @@
 <div class="prediction-container">
   <%= for {stop_id, stop_name, predictions} <- @stop_prediction_tuples do %>
     <%= live_component(@socket, BusKioskWeb.StopPredictionsComponent, id: stop_id,
-      stop_name: stop_name, predictions: predictions, stop_id: stop_id) %>
+      stop_name: stop_name, predictions: predictions) %>
   <% end %>
 </div>
 <%= if @joined_stop_names do %>
