@@ -54,7 +54,8 @@ defmodule BusKiosk.Gtfs.Stop do
       where:
         cd.date == ^calendar_date.date and cd.feed_id == ^calendar_date.feed_id and
           s.stop_id == ^stop.stop_id,
-      select: fragment("DISTINCT ?", t.route_id)
+      distinct: [t.route_id, t.direction_id],
+      select: fragment("? || ',' || ?", t.route_id, t.direction_id)
     )
     |> Repo.all()
   end
@@ -74,7 +75,7 @@ defmodule BusKiosk.Gtfs.Stop do
         """
         select s.*, (s.geom_point::geography <-> $1) * 3.28084 as distance, degrees(ST_Azimuth($1::geometry, s.geom_point)) as azimuth
         FROM gtfs.stops s
-        WHERE s.feed_id = $2
+        WHERE s.feed_id = $2 AND s.route_ids[1] IS NOT NULL
         order by s.geom_point <-> $1
         LIMIT 20
         """,

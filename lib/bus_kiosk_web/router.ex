@@ -15,13 +15,21 @@ defmodule BusKioskWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :live_layout do
+    plug :put_root_layout, {BusKioskWeb.LayoutView, :live}
+  end
+
   scope "/", BusKioskWeb do
     pipe_through :browser
 
-    live "/", HomeLive
+    scope "/" do
+      pipe_through :live_layout
+      live "/", HomeLive
+      live "/nearby_stops", NearbyStopsLive
+      live "/live", KioskLive
+    end
+
     get "/saved_stops", SavedStopController, :index
-    live "/nearby_stops", NearbyStopsLive
-    live "/live", KioskLive
   end
 
   # Other scopes may use custom stacks.

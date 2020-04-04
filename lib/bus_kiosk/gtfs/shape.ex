@@ -1,8 +1,6 @@
 defmodule BusKiosk.Gtfs.Shape do
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query, only: [from: 1, from: 2]
-  alias BusKiosk.Repo
 
   @schema_prefix "gtfs"
   @primary_key false

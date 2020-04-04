@@ -7,7 +7,7 @@
 <%= for stop <- @stops do %>
   <div>
     <%= live_redirect "#{stop.stop_name} (#{round(stop.distance)} ft#{azimuth_emoji(stop.adjusted_azimuth)})", to: Routes.live_path(@socket, BusKioskWeb.KioskLive, stop_ids: stop.stop_id) %>
-    <div><%= Enum.join(stop.route_ids, ", ") %></div>
+    <div><%= stop_route_ids(stop) %></div>
   </div>
 <% end %>
 
