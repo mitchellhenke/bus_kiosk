@@ -25,7 +25,6 @@ export default class NearbyStopsController extends Controller {
         .catch(console.error);
     } else {
       // handle regular non iOS 13+ devices
-      console.error("HELLO")
     }
 
   }
@@ -35,6 +34,9 @@ export default class NearbyStopsController extends Controller {
       mounted() {
         this.getLocation(this);
       },
+      reconnected() {
+        this.getLocation(this);
+      },
       getLocation(hook) {
         window.hook = hook
         if ('geolocation' in navigator) {
@@ -42,11 +44,9 @@ export default class NearbyStopsController extends Controller {
             const loc = { 'latitude': position.coords.latitude, 'longitude': position.coords.longitude, 'heading': position.coords.heading };
             hook.pushEvent('location', loc)
           }, function(error) {
-            console.error(error)
             hook.pushEvent('location', {'error': error})
           });
         } else {
-          console.error("WTF")
           hook.pushEvent('location', {'error': 'no_permission'})
         }
       }
