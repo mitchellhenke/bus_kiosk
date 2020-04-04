@@ -2,6 +2,7 @@ defmodule BusKiosk.Gtfs do
   require Logger
   alias BusKiosk.Repo
   import Ecto.Query
+  @connections Application.compile_env(:bus_kiosk, :gtfs_import_connections)
 
   alias BusKiosk.Gtfs.{CalendarDate, Feed, Route, Stop, StopTime, Trip}
 
@@ -96,7 +97,7 @@ defmodule BusKiosk.Gtfs do
         CalendarDate.changeset(%CalendarDate{}, params)
         |> Repo.insert!()
       end,
-      max_concurrency: 20
+      max_concurrency: @connections
     )
     |> Enum.map(fn {:ok, calendar_date} ->
       calendar_date
@@ -127,7 +128,7 @@ defmodule BusKiosk.Gtfs do
         Route.changeset(%Route{}, params)
         |> Repo.insert!()
       end,
-      max_concurrency: 20
+      max_concurrency: @connections
     )
     |> Enum.map(fn {:ok, route} ->
       route
@@ -166,7 +167,7 @@ defmodule BusKiosk.Gtfs do
         Trip.changeset(%Trip{}, params)
         |> Repo.insert!()
       end,
-      max_concurrency: 20
+      max_concurrency: @connections
     )
     |> Enum.map(fn {:ok, trip} ->
       trip
@@ -198,7 +199,7 @@ defmodule BusKiosk.Gtfs do
         Stop.changeset(%Stop{}, params)
         |> Repo.insert!()
       end,
-      max_concurrency: 20
+      max_concurrency: @connections
     )
     |> Enum.map(fn {:ok, stop} ->
       stop
@@ -267,7 +268,7 @@ defmodule BusKiosk.Gtfs do
 
         Repo.insert_all(StopTime, inserts)
       end,
-      max_concurrency: 20
+      max_concurrency: @connections
     )
     |> Enum.map(fn {:ok, stop_time} ->
       stop_time

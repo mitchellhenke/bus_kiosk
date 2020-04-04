@@ -9,8 +9,10 @@ use Mix.Config
 
 config :bus_kiosk,
   ecto_repos: [BusKiosk.Repo],
-  real_time_module: BusKiosk.TestRealTime
-  # mcts_api_key: ""
+  real_time_module: BusKiosk.TestRealTime,
+  # mcts_api_key: "",
+  real_time_polling_enabled: System.get_env("REAL_TIME_POLLING_ENABLED") != "false",
+  gtfs_import_connections: String.to_integer(System.get_env("GTFS_IMPORT_CONNECTIONS") || "10")
 
 # Configures the endpoint
 config :bus_kiosk, BusKioskWeb.Endpoint,
