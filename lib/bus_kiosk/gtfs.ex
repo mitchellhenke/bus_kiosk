@@ -2,7 +2,7 @@ defmodule BusKiosk.Gtfs do
   require Logger
   alias BusKiosk.Repo
   import Ecto.Query
-  @connections Application.compile_env(:bus_kiosk, :gtfs_import_connections)
+  @connections Application.compile_env!(:bus_kiosk, :gtfs_import_connections)
 
   alias BusKiosk.Gtfs.{CalendarDate, Feed, Route, Stop, StopTime, Trip}
 
