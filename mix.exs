@@ -43,7 +43,7 @@ defmodule BusKiosk.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      # {:phoenix_live_view, "~> 0.10.0"},
+      # {:phoenix_live_view, "~> 0.11.0"},
       {:phoenix_live_view, git: "https://github.com/phoenixframework/phoenix_live_view.git"},
       {:mojito, "~> 0.6.1"},
       {:nimble_parsec, "~> 0.5.0"},
