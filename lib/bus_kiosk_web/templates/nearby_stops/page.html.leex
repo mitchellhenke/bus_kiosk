@@ -5,10 +5,10 @@
 </div>
 
 <%= for stop <- @stops do %>
-  <div>
-    <%= live_redirect "#{stop.stop_name} (#{round(stop.distance)} ft#{azimuth_emoji(stop.adjusted_azimuth)})", to: Routes.live_path(@socket, BusKioskWeb.KioskLive, stop_ids: stop.stop_id) %>
-    <div><%= stop_route_ids(stop) %></div>
-  </div>
+  <%= live_component(@socket, BusKioskWeb.NearbyStopComponent, id: stop.stop_id,
+    stop_name: stop.stop_name, distance: round(stop.distance), adjusted_azimuth: stop.adjusted_azimuth, route_ids: stop.route_ids,
+    stop_id: stop.stop_id
+  ) %>
 <% end %>
 
 <div>

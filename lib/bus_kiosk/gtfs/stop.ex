@@ -67,6 +67,7 @@ defmodule BusKiosk.Gtfs.Stop do
     |> Repo.update_all(set: [route_ids: route_ids])
   end
 
+  # get nearest within 0.25 miles (or 402.34 meters)
   def get_nearest(point) do
     feed = BusKiosk.Gtfs.Feed.get_first_after_date(Date.utc_today())
 
@@ -75,9 +76,8 @@ defmodule BusKiosk.Gtfs.Stop do
         """
         select s.*, (s.geom_point::geography <-> $1) * 3.28084 as distance, degrees(ST_Azimuth($1::geometry, s.geom_point)) as azimuth
         FROM gtfs.stops s
-        WHERE s.feed_id = $2 AND s.route_ids[1] IS NOT NULL
+        WHERE s.feed_id = $2 AND s.route_ids[1] IS NOT NULL AND (s.geom_point::geography <-> $1) < 402.34
         order by s.geom_point <-> $1
-        LIMIT 20
         """,
         [point, feed.id]
       )

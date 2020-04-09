@@ -40,14 +40,16 @@ export default class NearbyStopsController extends Controller {
       getLocation(hook) {
         window.hook = hook
         if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition(function(position) {
+          navigator.geolocation.watchPosition(function(position) {
             const loc = { 'latitude': position.coords.latitude, 'longitude': position.coords.longitude, 'heading': position.coords.heading };
-            hook.pushEvent('location', loc)
+            hook.pushEvent('location', loc);
           }, function(error) {
-            hook.pushEvent('location', {'error': error})
+            console.error(error);
+            hook.pushEvent('location', {'error': error});
           });
         } else {
-          hook.pushEvent('location', {'error': 'no_permission'})
+          console.error('no location permission');
+          hook.pushEvent('location', {'error': 'no_permission'});
         }
       }
     }

@@ -49,10 +49,10 @@ defmodule BusKioskWeb.NearbyStopsView do
     <<226, 134, 150, 239, 184, 143>>
   end
 
-  def stop_route_ids(stop) do
+  def stop_route_ids(route_ids) do
    map = BusKiosk.RealTime.get_directions_map()
     # ["GOL,1", "30,0"]
-    Enum.map(stop.route_ids, fn(route_id) ->
+    Enum.map(route_ids, fn(route_id) ->
       # ["GOL", "1"]
       [route_id, direction_id] = String.split(route_id, ",")
       direction = get_in(map, [String.trim_trailing(route_id, "D"), direction_id])
