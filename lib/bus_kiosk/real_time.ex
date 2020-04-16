@@ -33,9 +33,7 @@ defmodule BusKiosk.RealTime do
   def get_directions_map do
     %{
       "12" => %{"0" => "East", "1" => "West"},
-
       "137" => %{"0" => "West", "1" => "East"},
-
       "14" => %{"0" => "North", "1" => "South"},
       "143" => %{"0" => "North", "1" => "South"},
       "15" => %{"0" => "North", "1" => "South"},
@@ -77,7 +75,7 @@ defmodule BusKiosk.RealTime do
       "RED" => %{"0" => "East", "1" => "West"},
       "RR1" => %{"0" => "North", "1" => "South"},
       "RR2" => %{"0" => "North", "1" => "South"},
-      "RR3" => %{"0" => "North", "1" => "South"},
+      "RR3" => %{"0" => "North", "1" => "South"}
     }
   end
 end

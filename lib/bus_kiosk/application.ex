@@ -17,11 +17,12 @@ defmodule BusKiosk.Application do
     ]
 
     poller_enabled = Application.get_env(:bus_kiosk, :real_time_polling_enabled)
+
     children = if poller_enabled do
-      children ++ [{BusKiosk.RealTimePoller, %{}}]
-    else
-      children
-    end
+        children ++ [{BusKiosk.RealTimePoller, %{}}]
+      else
+        children
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
