@@ -11,6 +11,7 @@ defmodule BusKiosk.Application do
       # Start the Ecto repository
       BusKiosk.Repo,
       # Start the endpoint when the application starts
+      {Phoenix.PubSub, [name: BusKiosk.PubSub, adapter: Phoenix.PubSub.PG2]},
       BusKioskWeb.Endpoint,
       # Starts a worker by calling: BusKiosk.Worker.start_link(arg)
       {BusKiosk.RealTimeTracker, [name: BusKiosk.RealTimeTracker, pubsub_server: BusKiosk.PubSub]}

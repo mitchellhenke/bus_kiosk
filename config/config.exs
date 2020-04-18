@@ -20,7 +20,7 @@ config :bus_kiosk, BusKioskWeb.Endpoint,
   http: [compress: true],
   secret_key_base: "5MVdI104va7hVNk23RNuosKx+wMtp2NFoJZBDqNcqJl8GqiWfuwQPyryVIK6hoNd",
   render_errors: [view: BusKioskWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: BusKiosk.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: BusKiosk.PubSub,
   live_view: [
     signing_salt: "z38lsMlljav9khCujms4qszk0wxuXjGE"
   ]
