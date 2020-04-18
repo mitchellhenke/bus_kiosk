@@ -16,6 +16,7 @@ export default class NearbyStopsController extends Controller {
       DeviceOrientationEvent.requestPermission()
         .then(permissionState => {
           if (permissionState === 'granted') {
+            this.element.classList.add('hide');
             window.addEventListener('deviceorientation', function(e) {
               const newHeading = e.webkitCompassHeading;
               const heading = data.get("heading")
@@ -88,10 +89,30 @@ export default class NearbyStopsController extends Controller {
       getLocation(hook) {
         window.hook = hook
         if ('geolocation' in navigator) {
-          navigator.geolocation.watchPosition(function(position) {
-            console.log(position)
-            const loc = { 'latitude': position.coords.latitude, 'longitude': position.coords.longitude };
-            hook.pushEvent('location', loc);
+          navigator.geolocation.watchPosition(function(newPosition) {
+            const element = document.getElementById('nearby-stops-location')
+            console.log(newPosition)
+
+            let oldPosition = element.dataset.position;
+            let distance = undefined;
+            let time = undefined;
+            if(oldPosition) {
+              oldPosition = JSON.parse(oldPosition);
+              distance = (Math.abs(oldPosition.coords.latitude - newPosition.coords.latitude) * 78710) +
+                (Math.abs(oldPosition.coords.longitude - newPosition.coords.longitude) * 78710);
+              time = newPosition.timestamp - oldPosition.timestamp;
+              console.log(distance);
+              console.log(time);
+            }
+
+            if(oldPosition === undefined || distance > 10 || time > 10000) {
+              const loc = { 'latitude': newPosition.coords.latitude, 'longitude': newPosition.coords.longitude };
+              const j = hook.pushEvent('location', loc);
+              element.dataset.position = JSON.stringify({coords: {
+                latitude: newPosition.coords.latitude,
+                longitude: newPosition.coords.longitude
+              }, timestamp: newPosition.timestamp});
+            }
           }, function(error) {
             console.error(error);
             hook.pushEvent('location', {'error': error});
