@@ -5,6 +5,8 @@ export default class NearbyStopsController extends Controller {
     if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
       console.log("showing button")
       this.element.classList.remove('hide');
+    } else {
+      this.locate();
     }
   }
 
