@@ -87,7 +87,8 @@ export default class NearbyStopsController extends Controller {
         window.hook = hook
         if ('geolocation' in navigator) {
           navigator.geolocation.watchPosition(function(position) {
-            const loc = { 'latitude': position.coords.latitude, 'longitude': position.coords.longitude, 'heading': position.coords.heading };
+            console.log(position)
+            const loc = { 'latitude': position.coords.latitude, 'longitude': position.coords.longitude };
             hook.pushEvent('location', loc);
           }, function(error) {
             console.error(error);
