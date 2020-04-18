@@ -99,8 +99,6 @@ export default class NearbyStopsController extends Controller {
               distance = (Math.abs(oldPosition.coords.latitude - newPosition.coords.latitude) * 78710) +
                 (Math.abs(oldPosition.coords.longitude - newPosition.coords.longitude) * 78710);
               time = newPosition.timestamp - oldPosition.timestamp;
-              console.log(distance);
-              console.log(time);
             }
 
             if(oldPosition === undefined || distance > 10 || time > 10000) {
