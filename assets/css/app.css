@@ -523,7 +523,7 @@ input[type='text']::placeholder {
   display: block;
 }
 
-.nearby-stops.hide {
+.nearby-stops .hide {
   display: none;
 }
 

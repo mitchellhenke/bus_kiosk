@@ -1,8 +1,10 @@
 <h1>Nearby Stops</h1>
-<div id="nearby-stops" phx-update="ignore" phx-hook="nearbyStops" class="nearby-stops hide" data-controller="nearby-stops">
-  <button data-action="click->nearby-stops#locate">
-    Show me the direction
-  </button>
+<div id="nearby-stops" phx-update="ignore" phx-hook="nearbyStops" class="nearby-stops">
+  <div class="hide" data-controller="nearby-stops">
+    <button data-action="click->nearby-stops#locate">
+      Show me the direction
+    </button>
+  </div>
 </div>
 
 <%= for stop <- @stops do %>
