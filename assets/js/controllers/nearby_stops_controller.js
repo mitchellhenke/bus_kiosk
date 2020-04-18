@@ -3,6 +3,7 @@ import { Controller } from "stimulus"
 export default class NearbyStopsController extends Controller {
   connect() {
     if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      console.log("showing button")
       this.element.classList.remove('hide');
     }
   }

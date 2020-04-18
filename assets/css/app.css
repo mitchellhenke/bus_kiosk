@@ -526,3 +526,11 @@ input[type='text']::placeholder {
 .nearby-stops.hide {
   display: none;
 }
+
+/* footer */
+
+.footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+  padding-top: 20px;
+}

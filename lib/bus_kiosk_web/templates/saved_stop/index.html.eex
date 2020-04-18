@@ -15,7 +15,7 @@
     </div>
   </template>
 </div>
-<div>
+<div class="footer">
   <ul>
     <li><%= link "Home", to: Routes.live_path(@conn, BusKioskWeb.HomeLive)%></li>
     <li>
