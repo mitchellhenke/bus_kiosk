@@ -30,6 +30,9 @@
       <%= link "My Saved Stops", to: Routes.saved_stop_path(BusKioskWeb.Endpoint, :index) %>
     </li>
     <li>
+      <%= live_redirect "Stops Near Me (BETA)", to: Routes.live_path(@socket, BusKioskWeb.NearbyStopsLive) %>
+    </li>
+    <li>
       <%= link "Home", to: Routes.live_path(BusKioskWeb.Endpoint, BusKioskWeb.HomeLive) %>
     </li>
   </ul>

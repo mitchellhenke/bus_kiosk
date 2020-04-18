@@ -18,5 +18,8 @@
 <div>
   <ul>
     <li><%= link "Home", to: Routes.live_path(@conn, BusKioskWeb.HomeLive)%></li>
+    <li>
+      <%= live_redirect "Stops Near Me (BETA)", to: Routes.live_path(@conn, BusKioskWeb.NearbyStopsLive) %>
+    </li>
   </ul>
 </div>
