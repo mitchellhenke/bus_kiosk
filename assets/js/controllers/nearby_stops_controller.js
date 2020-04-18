@@ -3,7 +3,6 @@ import { Controller } from "stimulus"
 export default class NearbyStopsController extends Controller {
   connect() {
     if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      console.log("showing button")
       this.element.classList.remove('hide');
     } else {
       this.locate();
@@ -91,7 +90,6 @@ export default class NearbyStopsController extends Controller {
         if ('geolocation' in navigator) {
           navigator.geolocation.watchPosition(function(newPosition) {
             const element = document.getElementById('nearby-stops-location')
-            console.log(newPosition)
 
             let oldPosition = element.dataset.position;
             let distance = undefined;

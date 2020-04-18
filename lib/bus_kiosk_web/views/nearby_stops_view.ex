@@ -6,6 +6,13 @@ defmodule BusKioskWeb.NearbyStopsView do
   end
 
   def azimuth_emoji(azimuth) do
+    style = "transform: rotate(#{azimuth}deg)"
+    ~E"""
+     <img class="azimuth" style="<%= style %>" src="<%= Routes.static_path(BusKioskWeb.Endpoint, "/images/arrow.svg") %>">
+    """
+  end
+
+  def azimuth_emoji(azimuth) do
     " #{do_azimuth_emoji(azimuth)}"
   end
 
