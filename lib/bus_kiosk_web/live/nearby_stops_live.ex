@@ -54,44 +54,33 @@ defmodule BusKioskWeb.NearbyStopsLive do
     Phoenix.View.render(BusKioskWeb.NearbyStopsView, "page.html", assigns)
   end
 
-  def get_stops(nil, _longitude, _), do: []
-  def get_stops(_latitude, nil, _), do: []
+  def get_stops(nil, _longitude), do: []
+  def get_stops(_latitude, nil), do: []
 
-  def get_stops(latitude, longitude, heading) do
+  def get_stops(latitude, longitude) do
     point = %Geo.Point{
       coordinates: {longitude, latitude},
       properties: %{},
       srid: 4326
     }
 
-    stops = BusKiosk.Gtfs.Stop.get_nearest(point)
-
-    if not is_nil(heading) do
-      Enum.map(stops, fn stop ->
-        Map.put(stop, :adjusted_azimuth, rem(trunc(stop.azimuth) - trunc(heading) + 360, 360))
-      end)
-    else
-      Enum.map(stops, fn stop ->
-        Map.put(stop, :adjusted_azimuth, nil)
-      end)
-    end
+    BusKiosk.Gtfs.Stop.get_nearest(point)
   end
 
   defp handle_changeset(socket, changeset) do
     case Ecto.Changeset.apply_action(changeset, :insert) do
       {:ok, params} ->
         socket =
-          if Map.has_key?(params, :latitude) && not is_nil(params.latitude) do
-            assign(socket, :latitude, params.latitude)
-          else
-            socket
-          end
+          case params do
+            %{latitude: lat, longitude: lon} when is_float(lat) and is_float(lon) ->
+              stops = get_stops(lat, lon)
 
-        socket =
-          if Map.has_key?(params, :longitude) && not is_nil(params.longitude) do
-            assign(socket, :longitude, params.longitude)
-          else
-            socket
+              assign(socket, :latitude, lat)
+              |> assign(:longitude, lon)
+              |> assign(:stops, stops)
+
+            _ ->
+              socket
           end
 
         socket =
@@ -101,14 +90,24 @@ defmodule BusKioskWeb.NearbyStopsLive do
             socket
           end
 
-        socket =
-          assign(socket, :changeset, changeset)
-          |> assign(:params, params)
-
         stops =
-          get_stops(socket.assigns.latitude, socket.assigns.longitude, socket.assigns.heading)
+          if not is_nil(socket.assigns.heading) do
+            Enum.map(socket.assigns.stops, fn stop ->
+              Map.put(
+                stop,
+                :adjusted_azimuth,
+                rem(trunc(stop.azimuth) - trunc(socket.assigns.heading) + 360, 360)
+              )
+            end)
+          else
+            Enum.map(socket.assigns.stops, fn stop ->
+              Map.put(stop, :adjusted_azimuth, nil)
+            end)
+          end
 
-        assign(socket, :stops, stops)
+        assign(socket, :changeset, changeset)
+        |> assign(:params, params)
+        |> assign(:stops, stops)
 
       {:error, error_changeset} ->
         assign(socket, :changeset, error_changeset)
