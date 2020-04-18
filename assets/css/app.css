@@ -518,3 +518,11 @@ input[type='text']::placeholder {
   padding: 0 0.5rem;
   margin-left: 3rem;
 }
+
+.nearby-stops {
+  display: block;
+}
+
+.nearby-stops.hide {
+  display: none;
+}
