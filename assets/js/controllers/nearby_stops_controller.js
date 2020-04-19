@@ -21,7 +21,7 @@ export default class NearbyStopsController extends Controller {
               const heading = data.get("heading")
               const isValid = e.webkitCompassAccuracy > 0;
               const diff = Math.abs((parseFloat(heading) + 360) - (newHeading + 360)) % 360;
-              if(isValid && (heading === null || diff > 15)) {
+              if(isValid && (heading === null || diff > 10)) {
                 const heading = data.set("heading", newHeading);
                 const loc = { 'heading': newHeading };
                 window.hook.pushEvent('location', loc);
@@ -70,7 +70,7 @@ export default class NearbyStopsController extends Controller {
         const heading = data.get("heading")
 
         const diff = Math.abs((parseFloat(heading) + 360) - (newHeading + 360)) % 360;
-        if(isValid && (heading === null || diff > 15)) {
+        if(isValid && (heading === null || diff > 10)) {
           const heading = data.set("heading", newHeading);
           const loc = { 'heading': newHeading };
           window.hook.pushEvent('location', loc);
