@@ -50,7 +50,9 @@ defmodule BusKiosk.MixProject do
       {:tzdata, "~> 1.0"},
       {:geo, "~> 3.0"},
       {:geo_postgis, "~> 3.0"},
-      {:eqrcode, "~> 0.1.7"}
+      {:eqrcode, "~> 0.1.7"},
+
+      {:floki, "~> 0.26.0", only: :test}
     ]
   end
 
