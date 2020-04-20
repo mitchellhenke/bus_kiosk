@@ -527,10 +527,6 @@ input[type='text']::placeholder {
   display: none;
 }
 
-.azimuth {
-  width: 10px;
-}
-
 /* footer */
 
 .footer {
