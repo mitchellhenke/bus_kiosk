@@ -19,7 +19,8 @@ defmodule BusKiosk.Application do
 
     poller_enabled = Application.get_env(:bus_kiosk, :real_time_polling_enabled)
 
-    children = if poller_enabled do
+    children =
+      if poller_enabled do
         children ++ [{BusKiosk.RealTimePoller, %{}}]
       else
         children
