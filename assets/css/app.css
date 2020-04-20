@@ -518,3 +518,19 @@ input[type='text']::placeholder {
   padding: 0 0.5rem;
   margin-left: 3rem;
 }
+
+.nearby-stops {
+  display: block;
+}
+
+.nearby-stops .hide {
+  display: none;
+}
+
+/* footer */
+
+.footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+  padding-top: 20px;
+}

@@ -14,17 +14,23 @@ import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
+import NearbyStopsController from "./controllers/nearby_stops_controller"
 const application = Application.start()
 const context = require.context("./controllers", true, /\.js$/)
 application.load(definitionsFromContext(context))
 
-const path = window.location.pathname.slice(0, 6)
+const path = window.location.pathname
 const isKiosk = path.startsWith("/live");
 const isHome = (path === "/" || path === "");
+const isNearby = path.startsWith("/nearby_stops");
 
-if(isKiosk || isHome) {
+if(isKiosk || isHome || isNearby) {
+  let Hooks = {};
+  if(isNearby) {
+    Hooks.nearbyStops = NearbyStopsController.hooks();
+  }
   let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-  let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}});
+  let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}});
   liveSocket.connect()
 }
 

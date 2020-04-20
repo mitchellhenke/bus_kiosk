@@ -9,13 +9,22 @@ defmodule BusKiosk.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      # BusKiosk.Repo,
+      BusKiosk.Repo,
       # Start the endpoint when the application starts
+      {Phoenix.PubSub, [name: BusKiosk.PubSub, adapter: Phoenix.PubSub.PG2]},
       BusKioskWeb.Endpoint,
       # Starts a worker by calling: BusKiosk.Worker.start_link(arg)
-      {BusKiosk.RealTimePoller, %{}},
       {BusKiosk.RealTimeTracker, [name: BusKiosk.RealTimeTracker, pubsub_server: BusKiosk.PubSub]}
     ]
+
+    poller_enabled = Application.get_env(:bus_kiosk, :real_time_polling_enabled)
+
+    children =
+      if poller_enabled do
+        children ++ [{BusKiosk.RealTimePoller, %{}}]
+      else
+        children
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

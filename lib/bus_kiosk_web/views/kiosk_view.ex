@@ -53,12 +53,15 @@ defmodule BusKioskWeb.KioskView do
 
   def stop_name(stop_id, []), do: stop_id
 
-  def stop_name(_stop_id, [prediction | _]) do
-    prediction.stop_name
-    |> String.replace(~r/\bSTREET\b/, "ST")
-    |> String.replace(~r/\bAVENUE\b/, "AV")
-    |> String.replace(~r/\bDRIVE\b/, "DR")
-    |> String.replace(~r/\bROAD\b/, "RD")
+  def stop_name(stop_id, [prediction | _]) do
+    name =
+      prediction.stop_name
+      |> String.replace(~r/\bSTREET\b/, "ST")
+      |> String.replace(~r/\bAVENUE\b/, "AV")
+      |> String.replace(~r/\bDRIVE\b/, "DR")
+      |> String.replace(~r/\bROAD\b/, "RD")
+
+    "#{name} (#{stop_id})"
   end
 
   def url_qr_code do

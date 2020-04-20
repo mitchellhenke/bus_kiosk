@@ -15,16 +15,20 @@
       <% end %>
   </fieldset>
 <% end %>
-<div>
+<div class="footer">
   <ul>
     <li>
       <%= link "My Saved Stops", to: Routes.saved_stop_path(BusKioskWeb.Endpoint, :index) %>
+    </li>
+    <li>
+      <%= link "Stops Near Me (BETA)", to: Routes.live_path(@socket, BusKioskWeb.NearbyStopsLive) %>
     </li>
   </ul>
 </div>
 <div>
   <div>Coming Soon:</div>
   <ul>
-    <li>Getting stops near your location</li>
+    <li>A better interface for nearby stops</li>
+    <li>Selecting specific routes at a stop</li>
   </ul>
 </div>

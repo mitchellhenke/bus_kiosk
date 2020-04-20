@@ -1,0 +1,28 @@
+<h1>Nearby Stops</h1>
+<div id="nearby-stops" phx-update="ignore" phx-hook="nearbyStops" class="nearby-stops">
+  <div id="nearby-stops-location">
+  </div>
+  <div class="hide" data-controller="nearby-stops">
+    <button data-action="click->nearby-stops#locate">
+      Show me the direction
+    </button>
+  </div>
+</div>
+
+<%= for stop <- @stops do %>
+  <%= live_component(@socket, BusKioskWeb.NearbyStopComponent, id: stop.stop_id,
+    stop_name: stop.stop_name, distance: round(stop.distance), adjusted_azimuth: stop.adjusted_azimuth, route_ids: stop.route_ids,
+    stop_id: stop.stop_id
+  ) %>
+<% end %>
+
+<div class="footer">
+  <ul>
+    <li>
+      <%= link "My Saved Stops", to: Routes.saved_stop_path(BusKioskWeb.Endpoint, :index) %>
+    </li>
+    <li>
+      <%= link "Home", to: Routes.live_path(BusKioskWeb.Endpoint, BusKioskWeb.HomeLive) %>
+    </li>
+  </ul>
+</div>

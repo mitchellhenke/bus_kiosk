@@ -9,8 +9,10 @@ use Mix.Config
 
 config :bus_kiosk,
   ecto_repos: [BusKiosk.Repo],
-  real_time_module: BusKiosk.TestRealTime
-  # mcts_api_key: ""
+  real_time_module: BusKiosk.TestRealTime,
+  # mcts_api_key: "",
+  real_time_polling_enabled: System.get_env("REAL_TIME_POLLING_ENABLED") != "false",
+  gtfs_import_connections: String.to_integer(System.get_env("GTFS_IMPORT_CONNECTIONS") || "10")
 
 # Configures the endpoint
 config :bus_kiosk, BusKioskWeb.Endpoint,
@@ -18,7 +20,7 @@ config :bus_kiosk, BusKioskWeb.Endpoint,
   http: [compress: true],
   secret_key_base: "5MVdI104va7hVNk23RNuosKx+wMtp2NFoJZBDqNcqJl8GqiWfuwQPyryVIK6hoNd",
   render_errors: [view: BusKioskWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: BusKiosk.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: BusKiosk.PubSub,
   live_view: [
     signing_salt: "z38lsMlljav9khCujms4qszk0wxuXjGE"
   ]
