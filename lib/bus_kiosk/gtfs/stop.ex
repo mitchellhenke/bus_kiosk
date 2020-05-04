@@ -76,7 +76,7 @@ defmodule BusKiosk.Gtfs.Stop do
         """
         select s.*, (s.geom_point::geography <-> $1) * 3.28084 as distance, degrees(ST_Azimuth($1::geometry, s.geom_point)) as azimuth
         FROM gtfs.stops s
-        WHERE s.feed_id = $2 AND s.route_ids[1] IS NOT NULL AND (s.geom_point::geography <-> $1) < 402.34
+        WHERE s.feed_id = $2 AND s.route_ids[1] IS NOT NULL AND ST_DWithin(s.geom_point::geography, $1::geography, 402.34)
         order by s.geom_point <-> $1
         """,
         [point, feed.id]
