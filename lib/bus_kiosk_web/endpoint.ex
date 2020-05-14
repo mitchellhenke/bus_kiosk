@@ -11,7 +11,11 @@ defmodule BusKioskWeb.Endpoint do
   ]
 
   socket "/live", Phoenix.LiveView.Socket,
-    websocket: [compress: true, connect_info: [session: @session_options]]
+    websocket: [
+      serializer: [{MsgPackSerializer, "~> 2.0.0"}],
+      compress: true,
+      connect_info: [session: @session_options]
+    ]
 
   # Serve at "/" the static files from "priv/static" directory.
   #

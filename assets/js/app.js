@@ -12,6 +12,7 @@ import css from "../css/app.css"
 import "phoenix_html"
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
+import { encodeM, decodeM } from "./msgpack_serializer";
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 import NearbyStopsController from "./controllers/nearby_stops_controller"
@@ -30,7 +31,8 @@ if(isKiosk || isHome || isNearby) {
     Hooks.nearbyStops = NearbyStopsController.hooks();
   }
   let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-  let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}});
+  let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}, encode: encodeM, decode: decodeM});
+
   liveSocket.connect()
 }
 
