@@ -33,7 +33,7 @@ defmodule BusKiosk.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "1.5.0-rc.0", override: true},
+      {:phoenix, "1.5.0"},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.1"},
@@ -43,8 +43,8 @@ defmodule BusKiosk.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.1"},
-      {:phoenix_live_view, "~> 0.12.0"},
-      # {:phoenix_live_view, git: "https://github.com/phoenixframework/phoenix_live_view.git"},
+      # {:phoenix_live_view, "~> 0.12.0"},
+      {:phoenix_live_view, git: "https://github.com/phoenixframework/phoenix_live_view.git"},
       {:mojito, "~> 0.6.1"},
       {:nimble_parsec, "~> 0.5.0"},
       {:tzdata, "~> 1.0"},
