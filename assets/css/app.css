@@ -44,8 +44,8 @@ button,
 input[type='button'],
 input[type='reset'],
 input[type='submit'] {
-  background-color: #009939;
-  border: 0.1rem solid #009939;
+  background-color: #008839;
+  border: 0.1rem solid #008839;
   border-radius: .4rem;
   color: #fff;
   cursor: pointer;
@@ -95,8 +95,8 @@ input[type='reset'][disabled]:focus,
 input[type='reset'][disabled]:hover,
 input[type='submit'][disabled]:focus,
 input[type='submit'][disabled]:hover {
-  background-color: #009939;
-  border-color: #009939;
+  background-color: #008839;
+  border-color: #008839;
 }
 
 .button.button-outline,
@@ -476,7 +476,7 @@ img {
 }
 
 .route {
-  background-color: #009939;
+  background-color: #008839;
   color: white;
   padding: 1rem 1rem;
   margin: 0rem 0rem;
