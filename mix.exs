@@ -41,8 +41,8 @@ defmodule BusKiosk.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.1"},
+      {:jason, "~> 1.1"},
+      {:plug_cowboy, "~> 2.3"},
       # {:phoenix_live_view, "~> 0.12.0"},
       {:phoenix_live_view, git: "https://github.com/phoenixframework/phoenix_live_view.git"},
       {:mojito, "~> 0.6.1"},
@@ -51,6 +51,8 @@ defmodule BusKiosk.MixProject do
       {:geo, "~> 3.0"},
       {:geo_postgis, "~> 3.0"},
       {:eqrcode, "~> 0.1.7"},
+      {:sentry, "8.0.0-rc.0"},
+      {:hackney, "~> 1.8"},
       {:floki, "~> 0.26.0", only: :test}
     ]
   end
