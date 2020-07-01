@@ -33,7 +33,9 @@ config :logger, :console,
 config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config :phoenix,
+  json_library: Jason,
+  static_compressors: [Phoenix.Digester.Gzip, Phoenix.Digester.Brotli]
 
 config :sentry,
   dsn: System.get_env("SENTRY_DSN"),

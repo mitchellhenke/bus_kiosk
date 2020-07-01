@@ -33,7 +33,8 @@ defmodule BusKiosk.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.0"},
+      # {:phoenix, "~> 1.5.0"},
+      {:phoenix, git: "https://github.com/mitchellhenke/phoenix.git", branch: "configurable-compressors", override: true},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.1"},
@@ -52,6 +53,7 @@ defmodule BusKiosk.MixProject do
       {:geo_postgis, "~> 3.0"},
       {:eqrcode, "~> 0.1.7"},
       {:sentry, "8.0.0-rc.2"},
+      {:brotli, "~> 0.2.1"},
       {:hackney, "~> 1.8"},
       {:floki, "~> 0.26.0", only: :test}
     ]

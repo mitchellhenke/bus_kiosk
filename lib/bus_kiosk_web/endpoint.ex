@@ -22,6 +22,7 @@ defmodule BusKioskWeb.Endpoint do
     at: "/",
     from: :bus_kiosk,
     gzip: true,
+    brotli: true,
     only:
       ~w(css fonts images js favicon.ico site.webmanifest apple-touch-icon.png favicon-16x16.png favicon-32x32.png android-chrome-192x192.png android-chrome-512x512.png robots.txt)
 
