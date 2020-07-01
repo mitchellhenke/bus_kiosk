@@ -51,7 +51,7 @@ defmodule BusKiosk.MixProject do
       {:geo, "~> 3.0"},
       {:geo_postgis, "~> 3.0"},
       {:eqrcode, "~> 0.1.7"},
-      {:sentry, "8.0.0-rc.0"},
+      {:sentry, "8.0.0-rc.2"},
       {:hackney, "~> 1.8"},
       {:floki, "~> 0.26.0", only: :test}
     ]
