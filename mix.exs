@@ -34,7 +34,10 @@ defmodule BusKiosk.MixProject do
   defp deps do
     [
       # {:phoenix, "~> 1.5.0"},
-      {:phoenix, git: "https://github.com/mitchellhenke/phoenix.git", branch: "configurable-compressors", override: true},
+      {:phoenix,
+       git: "https://github.com/mitchellhenke/phoenix.git",
+       branch: "configurable-compressors",
+       override: true},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.1"},
