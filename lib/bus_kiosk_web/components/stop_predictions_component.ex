@@ -4,7 +4,7 @@ defmodule BusKioskWeb.StopPredictionsComponent do
   def render(assigns) do
     ~L"""
       <div class="prediction-item">
-        <h2 class="route"><%= @stop_name %></h2>
+        <h1 class="route"><%= @stop_name %></h1>
         <table>
           <thead>
             <tr>
