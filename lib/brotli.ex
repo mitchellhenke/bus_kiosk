@@ -1,14 +1,18 @@
 defmodule Phoenix.Digester.Brotli do
   @behaviour Phoenix.Digester.Compressor
-  def compress(content) do
-    :brotli.encode(content)
+
+  def file_extensions do
+    [".br"]
   end
 
-  def file_extension do
-    ".br"
-  end
+  def compress_file(file_path, content) do
+    valid_extension = Path.extname(file_path) in Application.fetch_env!(:phoenix, :gzippable_exts)
+    compressed_content = :brotli.encode(content)
 
-  def compress_file?(file_path, _content, _digested_content) do
-    Path.extname(file_path) in Application.fetch_env!(:phoenix, :gzippable_exts)
+    if valid_extension && byte_size(compressed_content) < byte_size(content) do
+      {:ok, compressed_content}
+    else
+      :error
+    end
   end
 end
