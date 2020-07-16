@@ -54,7 +54,6 @@ defmodule BusKiosk.MixProject do
       {:tzdata, "~> 1.0"},
       {:geo, "~> 3.0"},
       {:geo_postgis, "~> 3.0"},
-      {:eqrcode, "~> 0.1.7"},
       {:sentry, "8.0.0-rc.2"},
       {:brotli, "~> 0.2.1"},
       {:hackney, "~> 1.8"},

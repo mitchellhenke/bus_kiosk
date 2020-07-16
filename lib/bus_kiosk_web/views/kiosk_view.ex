@@ -63,10 +63,4 @@ defmodule BusKioskWeb.KioskView do
 
     "#{name} (#{stop_id})"
   end
-
-  def url_qr_code do
-    Routes.live_url(BusKioskWeb.Endpoint, BusKioskWeb.KioskLive, %{})
-    |> EQRCode.encode()
-    |> EQRCode.svg()
-  end
 end
