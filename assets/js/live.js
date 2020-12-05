@@ -9,9 +9,9 @@ import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
-import NearbyStopsController from "./controllers/nearby_stops_controller"
+import NearbyStopsController from "./controllers/live/nearby_stops_controller"
 const application = Application.start()
-const context = require.context("./controllers", true, /\.js$/)
+const context = require.context("./controllers/live", true, /\.js$/)
 application.load(definitionsFromContext(context))
 
 const path = window.location.pathname

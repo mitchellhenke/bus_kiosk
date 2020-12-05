@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import Storage from "../storage"
+import Storage from "../../storage"
 
 // The controller fetches all saved stops and displays the link
 // to the "/live" page and a button to remove it.

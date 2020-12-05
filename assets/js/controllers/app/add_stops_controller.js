@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import Storage from "../storage"
+import Storage from "../../storage"
 
 export default class extends Controller {
   static targets = [ "name" ]
