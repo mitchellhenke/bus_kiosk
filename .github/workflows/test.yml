@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-elixir@v1.0.0
         with:
           otp-version: 22.1
-          elixir-version: 1.10.2
+          elixir-version: 1.11.2
       - name: Run Mix project tests
         run: |
           mix deps.get
