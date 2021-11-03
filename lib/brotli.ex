@@ -9,7 +9,7 @@ defmodule Phoenix.Digester.Brotli do
     valid_extension =
       Path.extname(file_path) in (Application.fetch_env!(:phoenix, :gzippable_exts) ++ [".ico"])
 
-    compressed_content = :brotli.encode(content)
+    {:ok, compressed_content} = :brotli.encode(content)
 
     if valid_extension && byte_size(compressed_content) < byte_size(content) do
       {:ok, compressed_content}

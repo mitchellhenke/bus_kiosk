@@ -52,7 +52,7 @@ defmodule BusKiosk.MixProject do
       {:geo, "~> 3.0"},
       {:geo_postgis, "~> 3.0"},
       {:sentry, git: "https://github.com/getsentry/sentry-elixir.git"},
-      {:brotli, "~> 0.2.1"},
+      {:brotli, "~> 0.3.0"},
       {:hackney, "~> 1.8"},
       {:floki, "~> 0.26.0", only: :test}
     ]
